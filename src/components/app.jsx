@@ -8,7 +8,7 @@ import Property from './property';
 import NotFound from './not-found';
 import Footer from './footer';
 import places from '../mock/mock-places';
-import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
 
 const App = () => (
   <BrowserRouter>
