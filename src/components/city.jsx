@@ -20,7 +20,7 @@ const City = (props) => {
           </>
           :
           <>
-            <Places/>
+            <Places placesNumber={0} cityName="chosen city"/>
             <Map/>
           </>
         }

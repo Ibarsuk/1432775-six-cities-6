@@ -6,6 +6,24 @@ export const AccomodationType = {
 };
 
 export const PlaceCardState = {
-  COMMON: `common`,
-  FAVOURITE: `favourite`
+  CITIES: `cities`,
+  FAVOURITE: `favourite`,
+  NEAR: `near`
 };
+
+export const RAITINGS = [
+  `perfect`,
+  `good`,
+  `not bad`,
+  `badly`,
+  `terribly`
+];
+
+export const CITIES = [
+  `Paris`,
+  `Cologne`,
+  `Brussels`,
+  `Amsterdam`,
+  `Hamburg`,
+  `Dusseldorf`
+];

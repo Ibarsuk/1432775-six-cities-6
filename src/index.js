@@ -3,6 +3,6 @@ import ReactDom from "react-dom";
 import App from './components/app';
 
 ReactDom.render(
-    <App pageClassNames={`page--gray page--main`}/>,
+    <App/>,
     document.querySelector(`#root`)
 );

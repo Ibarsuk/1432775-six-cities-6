@@ -1,28 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {AccomodationType, PlaceCardState} from '../const';
+import {Link} from "react-router-dom";
 
 const PlaceCard = (props) => {
-  const {placeInfo: {preview = `img/placeholder260.png`, price = 0, raiting = 0, title = `place title`, placeType = `room type`, isPremium = false, isFavourite = false}, state = PlaceCardState.COMMON} = props;
+  const {placeInfo: {id, preview = `img/placeholder260.png`, price = 0, raiting = 0, title = `place title`, placeType = `room type`, isPremium = false, isFavourite = false}, state = PlaceCardState.COMMON} = props;
 
-
-  const isForFavourites = (state === PlaceCardState.FAVOURITE);
-  const MainImg = {
-    WIDTH: isForFavourites ? 150 : 260,
-    HEIGHT: isForFavourites ? 110 : 200
-  };
+  const MainImg = {};
+  let cardHtmlClass;
+  let imgWrapperHtmlClass;
+  switch (state) {
+    case PlaceCardState.FAVOURITE:
+      cardHtmlClass = `favorites__card`;
+      imgWrapperHtmlClass = `favorites`;
+      MainImg.WIDTH = 150;
+      MainImg.Height = 110;
+      break;
+    case PlaceCardState.NEAR:
+      cardHtmlClass = `near-places__card`;
+      imgWrapperHtmlClass = `near-places`;
+      MainImg.WIDTH = 260;
+      MainImg.Height = 200;
+      break;
+    default:
+      cardHtmlClass = `cities__place-card`;
+      imgWrapperHtmlClass = `cities`;
+      MainImg.WIDTH = 260;
+      MainImg.Height = 200;
+  }
 
   return (
-    <article className={`${isForFavourites ? `favorites__card` : `cities__place-card`} place-card`}>
+    <article className={`${cardHtmlClass} place-card`}>
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
       }
-      <div className={`${isForFavourites ? `favorites` : `cities`}__image-wrapper place-card__image-wrapper`}>
-        <a href="#">
+      <div className={`${imgWrapperHtmlClass}__image-wrapper place-card__image-wrapper`}>
+        <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={preview} width={MainImg.WIDTH} height={MainImg.HEIGHT} alt="Place image"/>
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -44,7 +61,7 @@ const PlaceCard = (props) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{title}</a>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{AccomodationType[placeType]}</p>
       </div>
@@ -60,7 +77,8 @@ PlaceCard.propTypes = {
     title: PropTypes.string.isRequired,
     placeType: PropTypes.oneOf(Object.keys(AccomodationType)),
     isPremium: PropTypes.bool.isRequired,
-    isFavourite: PropTypes.bool.isRequired
+    isFavourite: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired
   }),
   state: PropTypes.oneOf(Object.values(PlaceCardState))
 };

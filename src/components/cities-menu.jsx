@@ -1,39 +1,20 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
+import {CITIES} from '../const';
 
 const CitiesMenu = () => (
   <div className="tabs">
     <section className="locations container">
       <ul className="locations__list tabs__list">
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item" href="#">
-            <span>Paris</span>
-          </a>
-        </li>
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item" href="#">
-            <span>Cologne</span>
-          </a>
-        </li>
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item" href="#">
-            <span>Brussels</span>
-          </a>
-        </li>
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item tabs__item--active">
-            <span>Amsterdam</span>
-          </a>
-        </li>
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item" href="#">
-            <span>Hamburg</span>
-          </a>
-        </li>
-        <li className="locations__item">
-          <a className="locations__item-link tabs__item" href="#">
-            <span>Dusseldorf</span>
-          </a>
-        </li>
+        {CITIES.map((city, i) => (
+          <React.Fragment key={city + i}>
+            <li className="locations__item">
+              <NavLink activeClassName="tabs__item--active" className="locations__item-link tabs__item" href="#" to={`/${city}`}>
+                <span>{city}</span>
+              </NavLink>
+            </li>
+          </React.Fragment>
+        ))}
       </ul>
     </section>
   </div>
