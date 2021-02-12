@@ -13,7 +13,7 @@ export const generateRandomSet = (array) => {
   return Array.from(new Set(newArr));
 };
 
-export const TEXT = [
+export const texts = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.`,
   `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
@@ -27,12 +27,12 @@ export const TEXT = [
   `An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.`
 ];
 
-export const AVATARS = [
+export const avatars = [
   `img/avatar-angelina.jpg`,
   `img/avatar-max.jpg`
 ];
 
-export const NAMES = [
+export const names = [
   `Angelina`,
   `Max`,
   `Ann`,

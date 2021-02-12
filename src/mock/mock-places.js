@@ -1,4 +1,4 @@
-import {generateRandomSet, getRandomInteger, TEXT, AVATARS, NAMES} from './additional';
+import {generateRandomSet, getRandomInteger, texts, avatars, names} from './additional';
 import {accomodationType, cities} from '../const';
 
 const goods = [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`];
@@ -16,13 +16,13 @@ class CreateMockPlace {
       },
       name: Object.keys(cities)[getRandomInteger(0, Object.keys(cities).length - 1)]
     };
-    this.description = generateRandomSet(TEXT).join(` `);
+    this.description = generateRandomSet(texts).join(` `);
     this.goods = generateRandomSet(goods);
     this.host = {
-      avatarUrl: AVATARS[getRandomInteger(0, AVATARS.length - 1)],
+      avatarUrl: avatars[getRandomInteger(0, avatars.length - 1)],
       id: Math.random(),
       isPro: Boolean(getRandomInteger(0, 1)),
-      name: NAMES[getRandomInteger(0, NAMES.length - 1)]
+      name: names[getRandomInteger(0, names.length - 1)]
     };
     this.id = null;
     this.images = generateRandomSet(images);
@@ -37,7 +37,7 @@ class CreateMockPlace {
     this.preview = images[getRandomInteger(0, images.length - 2)];
     this.price = getRandomInteger(30, 300);
     this.raiting = getRandomInteger(1, 5);
-    this.title = TEXT[getRandomInteger(0, TEXT.length - 2)];
+    this.title = texts[getRandomInteger(0, texts.length - 2)];
     const types = Object.keys(accomodationType);
     this.placeType = types[getRandomInteger(0, types.length - 2)];
   }
