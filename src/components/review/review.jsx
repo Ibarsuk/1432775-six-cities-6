@@ -1,26 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Review = (props) => {
-  const {
-    reviewInfo: {
-      comment,
-      date,
-      rating,
-      user: {
-        avatarUrl,
-        name = `User name`
-      }
-    }
-  } = props;
+const Review = ({
+  comment,
+  date,
+  rating,
+  user
+}) => {
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
         <div className="reviews__avatar-wrapper user__avatar-wrapper">
-          <img className="reviews__avatar user__avatar" src={avatarUrl} width="54" height="54" alt="Reviews avatar"/>
+          <img className="reviews__avatar user__avatar" src={user.avatarUrl} width="54" height="54" alt="Reviews avatar"/>
         </div>
         <span className="reviews__user-name">
-          {name}
+          {user.name}
         </span>
       </div>
       <div className="reviews__info">
@@ -40,15 +34,13 @@ const Review = (props) => {
 };
 
 Review.propTypes = {
-  reviewInfo: PropTypes.shape({
-    comment: PropTypes.string.isRequired,
-    date: PropTypes.instanceOf(Date).isRequired,
-    rating: PropTypes.number.isRequired,
-    user: PropTypes.shape({
-      avatarUrl: PropTypes.string,
-      name: PropTypes.string.isRequired
-    })
-  })
+  comment: PropTypes.string.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
+  rating: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    avatarUrl: PropTypes.string,
+    name: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default Review;

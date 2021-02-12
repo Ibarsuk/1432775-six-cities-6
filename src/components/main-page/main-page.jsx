@@ -1,6 +1,7 @@
 import React from "react";
-import CitiesMenu from './cities-menu';
-import City from './city';
+
+import CitiesMenu from '../cities-menu/cities-menu';
+import City from '../city/city';
 
 const MainPage = () => (
   <main className="page__main page__main--index">

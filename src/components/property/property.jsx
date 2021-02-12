@@ -1,38 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AccomodationType} from '../const';
-import mockReviews from '../mock/mock-comments';
-import places from '../mock/mock-places';
-import Review from './review';
-import {RAITINGS} from '../const';
-import PlaceCard from './place-card';
-import {generateRandomSet} from '../mock/additional';
+
+import places from '../../mock/mock-places';
+import mockReviews from '../../mock/mock-comments';
+import {accomodationType} from '../../const';
+
+import Review from '../review/review';
+import NearPlaceCard from '../place-card/near-place-card';
+import ReviewForm from '../review-form/review-form';
 
 const Property = (props) => {
   const {
-    placeInfo: {
-      price = 0,
-      raiting = 0,
-      title = `place title`,
-      placeType = `room type`,
-      isPremium = false,
-      isFavourite = false,
-      images = [],
-      bedrooms,
-      maxAdults,
-      goods = [],
-      host: {
-        avatarUrl = `img/no-avatar`,
-        isPro = false,
-        name: username = `User name`
-      },
-      description = `no description provided`
+    price,
+    raiting,
+    title,
+    placeType,
+    isPremium,
+    isFavourite,
+    images,
+    bedrooms,
+    maxAdults,
+    goods,
+    host: {
+      avatarUrl,
+      isPro,
+      name: username
     },
-    isSigned = false
+    description,
+    isSigned
   } = props;
 
   const nearPlaces = places.slice(0, 3);
-  const reviews = generateRandomSet(mockReviews);
+  const reviews = mockReviews;
 
   return (
     <main className="page__main page__main--property">
@@ -76,7 +75,7 @@ const Property = (props) => {
             </div>
             <ul className="property__features">
               <li className="property__feature property__feature--entire">
-                {AccomodationType[placeType]}
+                {accomodationType[placeType]}
               </li>
               <li className="property__feature property__feature--bedrooms">
                 {`${bedrooms} Bedroom${bedrooms > 1 ? `s` : ``}`}
@@ -122,33 +121,9 @@ const Property = (props) => {
               <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length || 0}</span></h2>
               {reviews.length > 0 &&
               <ul className="reviews__list">
-                {reviews.map((review, i) => <Review key={`review${i}`} reviewInfo={review}/>)}
+                {reviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
               </ul>}
-              {
-                isSigned &&
-              <form className="reviews__form form" action="#" method="post">
-                <label className="reviews__label form__label" htmlFor="review">Your review</label>
-                <div className="reviews__rating-form form__rating">
-                  {RAITINGS.map((raitingName, i) => (
-                    <React.Fragment key={raitingName + i}>
-                      <input className="form__rating-input visually-hidden" name="rating" value={RAITINGS.length - i} id={`${RAITINGS.length - i}-star`} type="radio"/>
-                      <label htmlFor={`${RAITINGS.length - i}-star`} className="reviews__rating-label form__rating-label" title={raitingName}>
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-                    </React.Fragment>
-                  ))}
-                </div>
-                <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
-                <div className="reviews__button-wrapper">
-                  <p className="reviews__help">
-                      To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
-                  </p>
-                  <button className="reviews__submit form__submit button" type="submit" disabled="">Submit</button>
-                </div>
-              </form>
-              }
+              {isSigned && <ReviewForm/>}
             </section>
           </div>
         </div>
@@ -158,7 +133,7 @@ const Property = (props) => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearPlaces.map((place, i) => <PlaceCard key={`near${i}`} placeInfo={place}/>)}
+            {nearPlaces.map((place, i) => <NearPlaceCard key={`near${i}`} {...place}/>)}
           </div>
         </section>
       </div>
@@ -167,26 +142,30 @@ const Property = (props) => {
 };
 
 Property.propTypes = {
-  placeInfo: PropTypes.shape({
-    preview: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    raiting: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    placeType: PropTypes.oneOf(Object.keys(AccomodationType)),
-    isPremium: PropTypes.bool.isRequired,
-    isFavourite: PropTypes.bool.isRequired,
-    images: PropTypes.arrayOf(PropTypes.string),
-    bedrooms: PropTypes.number.isRequired,
-    maxAdults: PropTypes.number.isRequired,
-    goods: PropTypes.arrayOf(PropTypes.string),
-    host: PropTypes.shape({
-      avatarUrl: PropTypes.string,
-      isPro: PropTypes.bool,
-      name: PropTypes.string
-    }),
-    description: PropTypes.string
-  }),
+  preview: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  raiting: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  placeType: PropTypes.oneOf(Object.keys(accomodationType)).isRequired,
+  isPremium: PropTypes.bool.isRequired,
+  isFavourite: PropTypes.bool.isRequired,
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  bedrooms: PropTypes.number.isRequired,
+  maxAdults: PropTypes.number.isRequired,
+  goods: PropTypes.arrayOf(PropTypes.string),
+  host: PropTypes.shape({
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired
+  }).isRequired,
+  description: PropTypes.string,
   isSigned: PropTypes.bool.isRequired
+};
+
+Property.defaultProps = {
+  description: `no description provided`,
+  isSigned: false,
+  goods: []
 };
 
 export default Property;

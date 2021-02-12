@@ -1,13 +1,16 @@
 import React from "react";
-import Places from './places';
-import Map from './map';
 import PropTypes from "prop-types";
 
+import Places from '../places/places';
+import Map from '../map/map';
+
 const City = (props) => {
-  const {isEmpty = false} = props;
+  const {isEmpty} = props;
+
+  const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
   return (
     <div className="cities">
-      <div className={`cities__places-container container${isEmpty ? ` cities__places-container--empty` : ``}`}>
+      <div className={`cities__places-container container${containerEmptyClassName}`}>
         {isEmpty ?
           <>
             <section className="cities__no-places">
@@ -31,6 +34,10 @@ const City = (props) => {
 
 City.propTypes = {
   isEmpty: PropTypes.bool
+};
+
+City.defaultProps = {
+  isEmpty: false
 };
 
 export default City;

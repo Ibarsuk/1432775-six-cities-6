@@ -1,10 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
-import PlaceCard from './place-card';
-import places from '../mock/mock-places';
+
+import places from '../../mock/mock-places';
+
+import PlaceCard from '../place-card/place-card';
+
 
 const Places = (props) => {
-  const {placesNumber = 0, cityName = `chosen city`} = props;
+  const {placesNumber, cityName} = props;
+  const [state, setState] = useState({
+    currentCard: null
+  });
+
+  const handlePlaceCardMouseOver = (placeId) => {
+    setState({
+      ...state,
+      currentCard: placeId
+    });
+  };
 
   return (
     <section className="cities__places places">
@@ -26,7 +39,7 @@ const Places = (props) => {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {places.map((place) => <PlaceCard placeInfo={place} key={`place${place.id}`}/>)}
+        {places.map((place) => <PlaceCard {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver}/>)}
       </div>
     </section>
   );
@@ -35,6 +48,11 @@ const Places = (props) => {
 Places.propTypes = {
   placesNumber: PropTypes.number.isRequired,
   cityName: PropTypes.string.isRequired
+};
+
+Places.defaultProps = {
+  cityName: `chosen city`,
+  placesNumber: 0
 };
 
 export default Places;

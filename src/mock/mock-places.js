@@ -1,9 +1,9 @@
 import {generateRandomSet, getRandomInteger, TEXT, AVATARS, NAMES} from './additional';
-import {AccomodationType, CITIES} from '../const';
+import {accomodationType, cities} from '../const';
 
-const GOODS = [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`];
+const goods = [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`];
 
-const IMAGES = [`img/room.jpg`, `img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/apartment-01.jpg`, `img/studio-01.jpg`];
+const images = [`img/room.jpg`, `img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/apartment-01.jpg`, `img/studio-01.jpg`];
 
 class CreateMockPlace {
   constructor() {
@@ -14,18 +14,18 @@ class CreateMockPlace {
         longitude: 4.895168,
         zoom: 10
       },
-      name: CITIES[getRandomInteger(0, CITIES.length - 1)]
+      name: Object.keys(cities)[getRandomInteger(0, Object.keys(cities).length - 1)]
     };
     this.description = generateRandomSet(TEXT).join(` `);
-    this.goods = generateRandomSet(GOODS);
+    this.goods = generateRandomSet(goods);
     this.host = {
       avatarUrl: AVATARS[getRandomInteger(0, AVATARS.length - 1)],
       id: Math.random(),
       isPro: Boolean(getRandomInteger(0, 1)),
       name: NAMES[getRandomInteger(0, NAMES.length - 1)]
     };
-    this.id = Math.random();
-    this.images = generateRandomSet(IMAGES);
+    this.id = null;
+    this.images = generateRandomSet(images);
     this.isFavourite = Boolean(getRandomInteger(0, 1));
     this.isPremium = Boolean(getRandomInteger(0, 1));
     this.location = {
@@ -34,15 +34,16 @@ class CreateMockPlace {
       zoom: 8
     };
     this.maxAdults = getRandomInteger(0, 12);
-    this.preview = IMAGES[getRandomInteger(0, IMAGES.length - 2)];
+    this.preview = images[getRandomInteger(0, images.length - 2)];
     this.price = getRandomInteger(30, 300);
     this.raiting = getRandomInteger(1, 5);
     this.title = TEXT[getRandomInteger(0, TEXT.length - 2)];
-    const types = Object.keys(AccomodationType);
+    const types = Object.keys(accomodationType);
     this.placeType = types[getRandomInteger(0, types.length - 2)];
   }
 
-  getPlace() {
+  getPlace(id) {
+    this.id = id;
     return {
       bedrooms: this.bedrooms,
       city: this.city,
@@ -64,4 +65,146 @@ class CreateMockPlace {
   }
 }
 
-export default new Array(7).fill().map(() => new CreateMockPlace().getPlace());
+// На случай, если понадобится проверка большим количеством случайных мест
+export const randomPlaces = new Array(8).fill().map((value, i) => new CreateMockPlace().getPlace(i));
+
+const places = [
+  {
+    bedrooms: 6,
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10
+      },
+      name: `Brussels`
+    },
+    description: `Sed sed nisi sed augue convallis suscipit in sed felis.`,
+    goods: [`Washing machine`],
+    host: {
+      avatarUrl: `img/avatar-max.jpg`,
+      id: 0.4363250592823429,
+      isPro: false,
+      name: `Ann`
+    },
+    id: 0,
+    images: [`img/apartment-01.jpg`, `img/apartment-03.jpg`, `img/studio-01.jpg`],
+    isFavourite: true,
+    isPremium: true,
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    maxAdults: 12,
+    preview: `img/apartment-01.jpg`,
+    price: 134,
+    raiting: 4,
+    title: `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
+    placeType: `room`
+  },
+  {
+    bedrooms: 5,
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10
+      },
+      name: `Paris`
+    },
+    description: `Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat.`,
+    goods: [`Cable TV`, `Kitchen`],
+    host: {
+      avatarUrl: `img/avatar-max.jpg`,
+      id: 0.3762986076333621,
+      isPro: true,
+      name: `Max`
+    },
+    id: 1,
+    images: [`img/apartment-01.jpg`],
+    isFavourite: true,
+    isPremium: false,
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    maxAdults: 1,
+    preview: `img/apartment-01.jpg`,
+    price: 79,
+    raiting: 1,
+    title: `Aliquam erat volutpat.`,
+    placeType: `room`
+  },
+  {
+    bedrooms: 6,
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10
+      },
+      name: `Cologne`
+    },
+    description: `Aliquam erat volutpat.`,
+    goods: [`Washing machine`, `Heating`, `Coffee machine`],
+    host: {
+      avatarUrl: `img/avatar-angelina.jpg`,
+      id: 0.44847128733385366,
+      isPro: true,
+      name: `Mary`
+    },
+    id: 2,
+    images: [`img/apartment-01.jpg`],
+    isFavourite: false,
+    isPremium: true,
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    maxAdults: 5,
+    preview: `img/apartment-01.jpg`,
+    price: 75,
+    raiting: 5,
+    title: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
+    placeType: `house`
+  },
+  {
+    bedrooms: 6,
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10
+      },
+      name: `Cologne`
+    },
+    description: `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+    goods: [`Heating`, `Kitchen`, `Washing machine`, `Coffee machine`],
+    host: {
+      avatarUrl: `img/avatar-max.jpg`,
+      id: 0.8771248481107099,
+      isPro: false,
+      name: `Max`
+    },
+    id: 3,
+    images: [`img/room.jpg`, `img/apartment-01.jpg`],
+    isFavourite: false,
+    isPremium: true,
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    maxAdults: 11,
+    preview: `img/room.jpg`,
+    price: 218,
+    raiting: 4,
+    title: `In rutrum ac purus sit amet tempus.`,
+    placeType: `house`
+  },
+];
+
+export default places;

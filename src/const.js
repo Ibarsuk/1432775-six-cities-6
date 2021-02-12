@@ -1,17 +1,11 @@
-export const AccomodationType = {
+export const accomodationType = {
   apartment: `Apartment`,
   room: `Private room`,
   house: `House`,
   hotel: `Hotel`
 };
 
-export const PlaceCardState = {
-  CITIES: `cities`,
-  FAVOURITE: `favourite`,
-  NEAR: `near`
-};
-
-export const RAITINGS = [
+export const raitings = [
   `perfect`,
   `good`,
   `not bad`,
@@ -19,11 +13,11 @@ export const RAITINGS = [
   `terribly`
 ];
 
-export const CITIES = [
-  `Paris`,
-  `Cologne`,
-  `Brussels`,
-  `Amsterdam`,
-  `Hamburg`,
-  `Dusseldorf`
-];
+export const cities = {
+  Paris: `paris`,
+  Cologne: `cologne`,
+  Brussels: `brussels`,
+  Amsterdam: `amsterdam`,
+  Hamburg: `hamburg`,
+  Dusseldorf: `dusseldorf`
+};
