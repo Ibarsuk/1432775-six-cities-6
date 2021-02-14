@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import placesArr from '../mock/mock-places';
-import PlaceCard from './place-card';
-import {PlaceCardState} from '../const';
 
-const FavouritesPage = (props) => {
-  const {isEmpty, places = placesArr} = props;
-  const cities = places
+import placesArr from '../../mock/mock-places';
+
+import FavouritePlaceCard from '../place-card/favourite-place-card';
+
+const sortPlaces = (citiesArr) => {
+  return citiesArr
   .filter((place) => place.isFavourite)
   .reduce((acc, current) => {
     let townCategory = acc[current.city.name];
@@ -17,21 +17,12 @@ const FavouritesPage = (props) => {
     }
     return acc;
   }, {});
+};
 
-  const CityFavComponent = (properties) => (
-    <li className="favorites__locations-items">
-      <div className="favorites__locations locations locations--current">
-        <div className="locations__item">
-          <a className="locations__item-link" href="#">
-            <span>{properties.name}</span>
-          </a>
-        </div>
-      </div>
-      <div className="favorites__places">
-        {cities[properties.name].map((place) => <PlaceCard placeInfo={place} state={PlaceCardState.FAVOURITE} key={`fav-cars${place.id}`}/>)}
-      </div>
-    </li>
-  );
+const FavouritesPage = (props) => {
+  const {isEmpty, places = placesArr} = props;
+
+  const cities = sortPlaces(places);
 
   if (isEmpty) {
     return (
@@ -54,7 +45,20 @@ const FavouritesPage = (props) => {
         <section className="favorites">
           <h1 className="favorites__title">Saved listing</h1>
           <ul className="favorites__list">
-            {Object.keys(cities).map((city, i) => <CityFavComponent key={city + i} name={city}/>)}
+            {Object.keys(cities).map((city, i) => (
+              <li className="favorites__locations-items" key={city + i}>
+                <div className="favorites__locations locations locations--current">
+                  <div className="locations__item">
+                    <a className="locations__item-link" href="#">
+                      <span>{city}</span>
+                    </a>
+                  </div>
+                </div>
+                <div className="favorites__places">
+                  {cities[city].map((place) => <FavouritePlaceCard {...place} key={`fav-cards${place.id}`}/>)}
+                </div>
+              </li>
+            ))}
           </ul>
         </section>
       </div>
