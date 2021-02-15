@@ -83,7 +83,7 @@ const places = [
     goods: [`Washing machine`],
     host: {
       avatarUrl: `img/avatar-max.jpg`,
-      id: 0.4363250592823429,
+      id: 1,
       isPro: false,
       name: `Ann`
     },
@@ -117,7 +117,7 @@ const places = [
     goods: [`Cable TV`, `Kitchen`],
     host: {
       avatarUrl: `img/avatar-max.jpg`,
-      id: 0.3762986076333621,
+      id: 2,
       isPro: true,
       name: `Max`
     },
@@ -151,7 +151,7 @@ const places = [
     goods: [`Washing machine`, `Heating`, `Coffee machine`],
     host: {
       avatarUrl: `img/avatar-angelina.jpg`,
-      id: 0.44847128733385366,
+      id: 3,
       isPro: true,
       name: `Mary`
     },
@@ -185,7 +185,7 @@ const places = [
     goods: [`Heating`, `Kitchen`, `Washing machine`, `Coffee machine`],
     host: {
       avatarUrl: `img/avatar-max.jpg`,
-      id: 0.8771248481107099,
+      id: 4,
       isPro: false,
       name: `Max`
     },

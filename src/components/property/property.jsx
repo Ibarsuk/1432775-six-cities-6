@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import places from '../../mock/mock-places';
 import mockReviews from '../../mock/mock-comments';
-import {accomodationType} from '../../const';
+import {accomodationType, RAITING_COEFFICIENT} from '../../const';
 
 import Review from '../review/review';
 import NearPlaceCard from '../place-card/near-place-card';
@@ -68,7 +68,7 @@ const Property = (props) => {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `${raiting * 20}%`}}></span>
+                <span style={{width: `${raiting * RAITING_COEFFICIENT}%`}}></span>
                 <span className="visually-hidden">{raiting}</span>
               </div>
               <span className="property__rating-value rating__value">{raiting}</span>
