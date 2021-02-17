@@ -13,6 +13,8 @@ export const raitings = [
   `terribly`
 ];
 
+export const RAITING_COEFFICIENT = 20;
+
 export const cities = {
   Paris: `paris`,
   Cologne: `cologne`,

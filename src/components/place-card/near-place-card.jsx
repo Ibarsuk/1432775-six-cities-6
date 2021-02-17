@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import {accomodationType} from "../../const";
+import {accomodationType, RAITING_COEFFICIENT} from "../../const";
 import {placeCardProps} from '../prop-types';
 
 const NearPlaceCard = (props) => {
@@ -45,7 +45,7 @@ const NearPlaceCard = (props) => {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${raiting * 20}%`}}></span>
+            <span style={{width: `${raiting * RAITING_COEFFICIENT}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
