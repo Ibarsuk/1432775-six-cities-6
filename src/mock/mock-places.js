@@ -77,7 +77,7 @@ const places = [
         longitude: 4.895168,
         zoom: 10
       },
-      name: `Brussels`
+      name: `Amsterdam`
     },
     description: `Sed sed nisi sed augue convallis suscipit in sed felis.`,
     goods: [`Washing machine`],
@@ -92,8 +92,8 @@ const places = [
     isFavourite: true,
     isPremium: true,
     location: {
-      latitude: 52.370216,
-      longitude: 4.895168,
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
       zoom: 10
     },
     maxAdults: 12,
@@ -111,7 +111,7 @@ const places = [
         longitude: 4.895168,
         zoom: 10
       },
-      name: `Paris`
+      name: `Amsterdam`
     },
     description: `Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat.`,
     goods: [`Cable TV`, `Kitchen`],
@@ -126,8 +126,8 @@ const places = [
     isFavourite: true,
     isPremium: false,
     location: {
-      latitude: 52.370216,
-      longitude: 4.895168,
+      latitude: 52.369553943508,
+      longitude: 4.85309666406198,
       zoom: 10
     },
     maxAdults: 1,
@@ -145,7 +145,7 @@ const places = [
         longitude: 4.895168,
         zoom: 10
       },
-      name: `Cologne`
+      name: `Amsterdam`
     },
     description: `Aliquam erat volutpat.`,
     goods: [`Washing machine`, `Heating`, `Coffee machine`],
@@ -160,8 +160,8 @@ const places = [
     isFavourite: false,
     isPremium: true,
     location: {
-      latitude: 52.370216,
-      longitude: 4.895168,
+      latitude: 52.3909553943508,
+      longitude: 4.929309666406198,
       zoom: 10
     },
     maxAdults: 5,
@@ -179,7 +179,7 @@ const places = [
         longitude: 4.895168,
         zoom: 10
       },
-      name: `Cologne`
+      name: `Amsterdam`
     },
     description: `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
     goods: [`Heating`, `Kitchen`, `Washing machine`, `Coffee machine`],
@@ -194,8 +194,8 @@ const places = [
     isFavourite: false,
     isPremium: true,
     location: {
-      latitude: 52.370216,
-      longitude: 4.895168,
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
       zoom: 10
     },
     maxAdults: 11,

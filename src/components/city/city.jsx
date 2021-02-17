@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import Places from '../places/places';
 import Map from '../map/map';
+import places from '../../mock/mock-places';
 
 const City = (props) => {
   const {isEmpty} = props;
@@ -24,7 +25,7 @@ const City = (props) => {
           :
           <>
             <Places placesNumber={0} cityName="chosen city"/>
-            <Map/>
+            <Map places={places}/>
           </>
         }
       </div>
