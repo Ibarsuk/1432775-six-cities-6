@@ -31,11 +31,12 @@ const App = () => (
           <Footer/>
         </div>
       </Route>
-      <Route path="/cities/:city" exact>
+      <Route path="/cities/:city" exact render={(props) => (
         <div className="page page--gray page--main">
           <Header/>
-          <MainPage/>
+          <MainPage city={props.match.params.city}/>
         </div>
+      )}>
       </Route>
       <Route path="/offer/:id" exact render={(props) => (
         <div className="page">

@@ -42,11 +42,7 @@ const Map = (props) => {
   });
 
   return (
-    <div className="cities__right-section">
-      <section className="cities__map map">
-        <div id="map" ref={mapRef} style={{height: `100%`}}></div>
-      </section>
-    </div>
+    <div id="map" ref={mapRef} style={{height: `100%`}}></div>
   );
 };
 

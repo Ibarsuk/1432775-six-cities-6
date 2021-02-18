@@ -1,12 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import {cities} from '../../const';
+
 import Places from '../places/places';
 import Map from '../map/map';
-import places from '../../mock/mock-places';
+import placesArr from '../../mock/mock-places';
 
 const City = (props) => {
-  const {isEmpty} = props;
+  const {city} = props;
+
+  const places = placesArr.filter((place) => cities[place.city.name] === city);
+  const isEmpty = places.length < 1;
 
   const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
   return (
@@ -24,8 +29,12 @@ const City = (props) => {
           </>
           :
           <>
-            <Places placesNumber={0} cityName="chosen city"/>
-            <Map places={places}/>
+            <Places placesNumber={places.length} cityName={city}/>
+            <div className="cities__right-section">
+              <section className="cities__map map">
+                <Map places={places}/>
+              </section>
+            </div>
           </>
         }
       </div>
@@ -34,7 +43,8 @@ const City = (props) => {
 };
 
 City.propTypes = {
-  isEmpty: PropTypes.bool
+  isEmpty: PropTypes.bool,
+  city: PropTypes.oneOf(Object.values(cities)).isRequired
 };
 
 City.defaultProps = {
