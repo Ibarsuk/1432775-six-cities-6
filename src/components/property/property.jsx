@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 
 import places from '../../mock/mock-places';
 import mockReviews from '../../mock/mock-comments';
-import {accomodationType, RAITING_COEFFICIENT} from '../../const';
+import {accomodationType, RAITING_COEFFICIENT, PlaceCardState} from '../../const';
 
 import Review from '../review/review';
-import NearPlaceCard from '../place-card/near-place-card';
+import ProxyPlaceCard from '../place-card/proxy-place-card';
 import ReviewForm from '../review-form/review-form';
+import Map from '../map/map';
 
 const Property = (props) => {
   const {
@@ -127,13 +128,15 @@ const Property = (props) => {
             </section>
           </div>
         </div>
-        <section className="property__map map"></section>
+        <section className="property__map map">
+          <Map places={nearPlaces}/>
+        </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearPlaces.map((place, i) => <NearPlaceCard key={`near${i}`} {...place}/>)}
+            {nearPlaces.map((place, i) => <ProxyPlaceCard key={`near${i}`} {...place} state={PlaceCardState.NEAR}/>)}
           </div>
         </section>
       </div>

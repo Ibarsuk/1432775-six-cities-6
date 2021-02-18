@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import placesArr from '../../mock/mock-places';
+import {PlaceCardState} from '../../const';
 
-import FavouritePlaceCard from '../place-card/favourite-place-card';
+import ProxyPlaceCard from '../place-card/proxy-place-card';
 
 const sortPlaces = (citiesArr) => {
   return citiesArr
@@ -55,7 +56,7 @@ const FavouritesPage = (props) => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {cities[city].map((place) => <FavouritePlaceCard {...place} key={`fav-cards${place.id}`}/>)}
+                  {cities[city].map((place) => <ProxyPlaceCard {...place} key={`fav-cards${place.id}`} state={PlaceCardState.FAVOURITE}/>)}
                 </div>
               </li>
             ))}

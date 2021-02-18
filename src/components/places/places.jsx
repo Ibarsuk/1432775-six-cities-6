@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import PropTypes from "prop-types";
 
 import places from '../../mock/mock-places';
+import {PlaceCardState} from '../../const';
 
-import PlaceCard from '../place-card/place-card';
+import ProxyPlaceCard from '../place-card/proxy-place-card';
 
 
 const Places = (props) => {
@@ -39,7 +40,7 @@ const Places = (props) => {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {places.map((place) => <PlaceCard {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver}/>)}
+        {places.map((place) => <ProxyPlaceCard {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver} state={PlaceCardState.CITIES}/>)}
       </div>
     </section>
   );

@@ -23,3 +23,9 @@ export const cities = {
   Hamburg: `hamburg`,
   Dusseldorf: `dusseldorf`
 };
+
+export const PlaceCardState = {
+  CITIES: `cities`,
+  FAVOURITE: `favourite`,
+  NEAR: `near`
+};
