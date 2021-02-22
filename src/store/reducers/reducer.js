@@ -11,7 +11,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.UPDATE_PLACES:
       return {
         ...state,
-        places: action.payload
+        offers: action.payload
       };
     case ActionType.UPDATE_REVIEWS:
       return {

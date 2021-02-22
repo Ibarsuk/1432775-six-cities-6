@@ -6,13 +6,13 @@ import {connect} from "react-redux";
 import {cities} from '../../const';
 import {place as propPlace} from '../prop-types';
 
-import Places from '../places/places';
+import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
 
 const CityWrapper = (props) => {
-  const {city, places} = props;
+  const {city, offers} = props;
 
-  const filteredPlaces = places.slice().filter((place) => cities[place.city.name] === city);
+  const filteredPlaces = offers.slice().filter((place) => cities[place.city.name] === city);
   const isEmpty = filteredPlaces.length < 1;
 
   const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
@@ -31,10 +31,10 @@ const CityWrapper = (props) => {
           </>
           :
           <>
-            <Places places={filteredPlaces} placesNumber={filteredPlaces.length} cityName={city}/>
+            <OffersList offers={filteredPlaces} placesNumber={filteredPlaces.length} cityName={city}/>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map places={filteredPlaces}/>
+                <Map offers={filteredPlaces}/>
               </section>
             </div>
           </>
@@ -46,11 +46,11 @@ const CityWrapper = (props) => {
 
 CityWrapper.propTypes = {
   city: PropTypes.oneOf(Object.values(cities)).isRequired,
-  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
 };
 
 const mapStateToProps = (state) => ({
-  places: state.places
+  offers: state.offers
 });
 
 export default connect(mapStateToProps)(CityWrapper);

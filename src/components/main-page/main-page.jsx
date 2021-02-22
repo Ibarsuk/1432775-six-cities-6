@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {cities} from '../../const';
 
 import CitiesMenu from '../cities-menu/cities-menu';
-import CityWrapper from '../city/city';
+import CityWrapper from '../city-wrapper/city-wrapper';
 
 const MainPage = (props) => {
   return (

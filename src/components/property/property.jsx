@@ -31,11 +31,11 @@ const Property = (props) => {
     },
     description,
     isSigned,
-    places,
+    offers,
     reviews
   } = props;
 
-  const nearPlaces = places.slice(0, 3);
+  const nearPlaces = offers.slice(0, 3);
 
   return (
     <main className="page__main page__main--property">
@@ -132,7 +132,7 @@ const Property = (props) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map places={nearPlaces}/>
+          <Map offers={nearPlaces}/>
         </section>
       </section>
       <div className="container">
@@ -150,7 +150,7 @@ const Property = (props) => {
 Property.propTypes = {
   ...propPlace,
   isSigned: PropTypes.bool.isRequired,
-  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
   reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired
 };
 
@@ -161,7 +161,7 @@ Property.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  places: state.places,
+  offers: state.offers,
   reviews: state.reviews
 });
 

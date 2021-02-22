@@ -32,7 +32,7 @@ const Map = (props) => {
     })
     .addTo(mapRef.current);
 
-    props.places.forEach((place) => {
+    props.offers.forEach((place) => {
       leaflet
     .marker([place.location.latitude, place.location.longitude], {icon})
     .addTo(mapRef.current);
@@ -49,7 +49,7 @@ const Map = (props) => {
 };
 
 Map.propTypes = {
-  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
 };
 
 export default Map;

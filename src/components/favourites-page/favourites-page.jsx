@@ -24,9 +24,9 @@ const sortPlaces = (citiesArr) => {
 };
 
 const FavouritesPage = (props) => {
-  const {isEmpty, places} = props;
+  const {isEmpty, offers} = props;
 
-  const cities = sortPlaces(places);
+  const cities = sortPlaces(offers);
 
   if (isEmpty) {
     return (
@@ -72,11 +72,11 @@ const FavouritesPage = (props) => {
 
 FavouritesPage.propTypes = {
   isEmpty: PropTypes.bool,
-  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
 };
 
 const mapStateToProps = (state) => ({
-  places: state.places
+  offers: state.offers
 });
 
 export default connect(mapStateToProps)(FavouritesPage);

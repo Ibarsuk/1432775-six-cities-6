@@ -44,7 +44,7 @@ const App = (props) => {
         <Route path="/offer/:id" exact render={(properties) => (
           <div className="page">
             <Header/>
-            <Property {...props.places.find((place) => String(place.id) === properties.match.params.id)} isSigned={true}/>
+            <Property {...props.offers.find((offer) => String(offer.id) === properties.match.params.id)} isSigned={true}/>
           </div>
         )}>
         </Route>
@@ -62,11 +62,11 @@ const App = (props) => {
 
 App.propTypes = {
   match: PropTypes.object,
-  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
 };
 
 const mapStateToProps = (state) => ({
-  places: state.places
+  offers: state.offers
 });
 
 export default connect(mapStateToProps)(App);
