@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
 import {accomodationType, RAITING_COEFFICIENT} from "../../const";
-import {place as propPlace} from '../prop-types';
+import {propOffer} from '../prop-types';
 
-const PlaceCard = (props) => {
+const OfferCard = (props) => {
   const {
     id,
     preview,
@@ -32,7 +32,7 @@ const PlaceCard = (props) => {
       }
       <div className={`${imgWrapperClassname}__image-wrapper place-card__image-wrapper`}>
         <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={preview} width={mainImgSize.WIDTH} height={mainImgSize.HEIGHT} alt="Place image"/>
+          <img className="place-card__image" src={preview} width={mainImgSize.width} height={mainImgSize.height} alt="Place image"/>
         </Link>
       </div>
       <div className="place-card__info">
@@ -63,8 +63,8 @@ const PlaceCard = (props) => {
   );
 };
 
-PlaceCard.propTypes = {
-  ...propPlace,
+OfferCard.propTypes = {
+  ...propOffer,
   onMouseOver: PropTypes.func,
   cardClassname: PropTypes.string.isRequired,
   imgWrapperClassname: PropTypes.string.isRequired,
@@ -74,4 +74,4 @@ PlaceCard.propTypes = {
   })
 };
 
-export default PlaceCard;
+export default OfferCard;

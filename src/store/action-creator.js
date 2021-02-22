@@ -5,8 +5,8 @@ const ActionCreator = {
     type: ActionType.CHANGE_SITY,
     payload
   }),
-  updatePlaces: (payload) => ({
-    type: ActionType.UPDATE_PLACES,
+  updateOffers: (payload) => ({
+    type: ActionType.UPDATE_OFFERS,
     payload
   }),
   updateComments: (payload) => ({

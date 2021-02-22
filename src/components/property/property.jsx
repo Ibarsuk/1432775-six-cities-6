@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
-import {accomodationType, RAITING_COEFFICIENT, PlaceCardType} from '../../const';
-import {place as propPlace, review as propReview} from '../prop-types';
+import {accomodationType, RAITING_COEFFICIENT, OfferCardType} from '../../const';
+import {propOffer, propReview} from '../prop-types';
 
 import Review from '../review/review';
-import PlaceCardProxy from '../place-card/place-card-proxy';
+import OfferCardProxy from '../offer-card/offer-card-proxy';
 import ReviewForm from '../review-form/review-form';
 import Map from '../map/map';
 
@@ -35,7 +35,7 @@ const Property = (props) => {
     reviews
   } = props;
 
-  const nearPlaces = offers.slice(0, 3);
+  const nearOffers = offers.slice(0, 3);
 
   return (
     <main className="page__main page__main--property">
@@ -132,14 +132,14 @@ const Property = (props) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map offers={nearPlaces}/>
+          <Map offers={nearOffers}/>
         </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearPlaces.map((place, i) => <PlaceCardProxy key={`near${i}`} {...place} cardType={PlaceCardType.NEAR}/>)}
+            {nearOffers.map((offer, i) => <OfferCardProxy key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>
@@ -148,9 +148,9 @@ const Property = (props) => {
 };
 
 Property.propTypes = {
-  ...propPlace,
+  ...propOffer,
   isSigned: PropTypes.bool.isRequired,
-  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
   reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired
 };
 

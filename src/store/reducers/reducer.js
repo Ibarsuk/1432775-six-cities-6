@@ -8,7 +8,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         activeCity: action.payload
       };
-    case ActionType.UPDATE_PLACES:
+    case ActionType.UPDATE_OFFERS:
       return {
         ...state,
         offers: action.payload

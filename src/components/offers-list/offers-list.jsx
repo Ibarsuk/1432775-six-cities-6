@@ -1,11 +1,10 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 
-import {PlaceCardType} from '../../const';
-import {place as propPlace} from '../prop-types';
+import {OfferCardType} from '../../const';
+import {propOffer} from '../prop-types';
 
-import PlaceCardProxy from '../place-card/place-card-proxy';
-
+import OfferCardProxy from '../offer-card/offer-card-proxy';
 
 const OffersList = (props) => {
   const {offers, cityName} = props;
@@ -40,20 +39,20 @@ const OffersList = (props) => {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((place) => <PlaceCardProxy {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver} cardType={PlaceCardType.CITIES}/>)}
+        {offers.map((offer) => <OfferCardProxy {...offer} key={`offer${offer.id}`} onMouseOver={handlePlaceCardMouseOver} cardType={OfferCardType.CITIES}/>)}
       </div>
     </section>
   );
 };
 
 OffersList.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
   cityName: PropTypes.string.isRequired
 };
 
 OffersList.defaultProps = {
   cityName: `chosen city`,
-  placesNumber: 0
+  offersNumber: 0
 };
 
 export default OffersList;

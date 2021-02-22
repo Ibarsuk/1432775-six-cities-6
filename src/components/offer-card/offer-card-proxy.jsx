@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import {PlaceCardType} from '../../const';
-import PlaceCard from './place-card';
+import {OfferCardType} from '../../const';
+import OfferCard from './offer-card';
 
 const cardOptions = {
-  [PlaceCardType.FAVOURITE]: {
+  [OfferCardType.FAVOURITE]: {
     cardClassname: `favorites__card`,
     imgWrapperClassname: `favorites`,
     imgSizes: {
@@ -13,7 +13,7 @@ const cardOptions = {
       height: 110
     }
   },
-  [PlaceCardType.NEAR]: {
+  [OfferCardType.NEAR]: {
     cardClassname: `near-places__card`,
     imgWrapperClassname: `near-places`,
     imgSizes: {
@@ -21,7 +21,7 @@ const cardOptions = {
       height: 200
     }
   },
-  [PlaceCardType.CITIES]: {
+  [OfferCardType.CITIES]: {
     cardClassname: `cities__place-card`,
     imgWrapperClassname: `cities`,
     imgSizes: {
@@ -31,10 +31,10 @@ const cardOptions = {
   }
 };
 
-const PlaceCardProxy = (props) => {
+const OfferCardProxy = (props) => {
   const options = cardOptions[props.cardType];
 
-  return <PlaceCard
+  return <OfferCard
     cardClassname={options.cardClassname}
     imgWrapperClassname={options.imgWrapperClassname}
     mainImgSize={options.imgSizes}
@@ -42,8 +42,8 @@ const PlaceCardProxy = (props) => {
   />;
 };
 
-PlaceCardProxy.propTypes = {
-  cardType: PropTypes.oneOf(Object.values(PlaceCardType)).isRequired
+OfferCardProxy.propTypes = {
+  cardType: PropTypes.oneOf(Object.values(OfferCardType)).isRequired
 };
 
-export default PlaceCardProxy;
+export default OfferCardProxy;

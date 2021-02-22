@@ -7,7 +7,7 @@ export const location = {
   zoom: PropTypes.number
 };
 
-export const place = {
+export const propOffer = {
   city: PropTypes.shape({
     location: PropTypes.shape(location),
     name: PropTypes.oneOf(Object.keys(cities))
@@ -33,7 +33,7 @@ export const place = {
   id: PropTypes.number.isRequired,
 };
 
-export const review = {
+export const propReview = {
   comment: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
   rating: PropTypes.number.isRequired,

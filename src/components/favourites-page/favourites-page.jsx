@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
-import {place as propPlace} from '../prop-types';
-import {PlaceCardType} from '../../const';
+import {propOffer} from '../prop-types';
+import {OfferCardType} from '../../const';
 
-import PlaceCardProxy from '../place-card/place-card-proxy';
+import OfferCardProxy from '../offer-card/offer-card-proxy';
 
 
-const sortPlaces = (citiesArr) => {
+const sortOffers = (citiesArr) => {
   return citiesArr
-  .filter((place) => place.isFavourite)
+  .filter((offer) => offer.isFavourite)
   .reduce((acc, current) => {
     let townCategory = acc[current.city.name];
     if (townCategory) {
@@ -26,7 +26,7 @@ const sortPlaces = (citiesArr) => {
 const FavouritesPage = (props) => {
   const {isEmpty, offers} = props;
 
-  const cities = sortPlaces(offers);
+  const cities = sortOffers(offers);
 
   if (isEmpty) {
     return (
@@ -59,7 +59,7 @@ const FavouritesPage = (props) => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {cities[city].map((place) => <PlaceCardProxy {...place} key={`fav-cards${place.id}`} cardType={PlaceCardType.FAVOURITE}/>)}
+                  {cities[city].map((offer) => <OfferCardProxy {...offer} key={`fav-cards${offer.id}`} cardType={OfferCardType.FAVOURITE}/>)}
                 </div>
               </li>
             ))}
@@ -72,7 +72,7 @@ const FavouritesPage = (props) => {
 
 FavouritesPage.propTypes = {
   isEmpty: PropTypes.bool,
-  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
 };
 
 const mapStateToProps = (state) => ({

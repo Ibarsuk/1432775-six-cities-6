@@ -1,4 +1,4 @@
-import mockOffers from '../mock/mock-places';
+import mockOffers from '../mock/mock-offers';
 import mockReviews from '../mock/mock-comments';
 
 export default {

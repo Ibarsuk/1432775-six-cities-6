@@ -1,5 +1,5 @@
 import React from "react";
-import {review} from '../prop-types';
+import {propReview} from '../prop-types';
 
 const Review = ({
   comment,
@@ -33,6 +33,6 @@ const Review = ({
   );
 };
 
-Review.propTypes = review;
+Review.propTypes = propReview;
 
 export default Review;

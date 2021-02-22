@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
 
-import {place as propPlace} from '../prop-types';
+import {propOffer} from '../prop-types';
 import {connect} from "react-redux";
 
 import Header from '../header/header';
@@ -62,7 +62,7 @@ const App = (props) => {
 
 App.propTypes = {
   match: PropTypes.object,
-  offers: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
 };
 
 const mapStateToProps = (state) => ({
