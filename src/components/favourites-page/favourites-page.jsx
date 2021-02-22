@@ -1,10 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import placesArr from '../../mock/mock-places';
-import {PlaceCardState} from '../../const';
+import {connect} from "react-redux";
 
-import ProxyPlaceCard from '../place-card/proxy-place-card';
+import {place as propPlace} from '../prop-types';
+import {PlaceCardType} from '../../const';
+
+import PlaceCardProxy from '../place-card/place-card-proxy';
+
 
 const sortPlaces = (citiesArr) => {
   return citiesArr
@@ -21,7 +24,7 @@ const sortPlaces = (citiesArr) => {
 };
 
 const FavouritesPage = (props) => {
-  const {isEmpty, places = placesArr} = props;
+  const {isEmpty, places} = props;
 
   const cities = sortPlaces(places);
 
@@ -56,7 +59,7 @@ const FavouritesPage = (props) => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {cities[city].map((place) => <ProxyPlaceCard {...place} key={`fav-cards${place.id}`} state={PlaceCardState.FAVOURITE}/>)}
+                  {cities[city].map((place) => <PlaceCardProxy {...place} key={`fav-cards${place.id}`} cardType={PlaceCardType.FAVOURITE}/>)}
                 </div>
               </li>
             ))}
@@ -69,7 +72,11 @@ const FavouritesPage = (props) => {
 
 FavouritesPage.propTypes = {
   isEmpty: PropTypes.bool,
-  places: PropTypes.array
+  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired
 };
 
-export default FavouritesPage;
+const mapStateToProps = (state) => ({
+  places: state.places
+});
+
+export default connect(mapStateToProps)(FavouritesPage);

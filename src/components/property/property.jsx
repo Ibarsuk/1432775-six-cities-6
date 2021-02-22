@@ -1,14 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import places from '../../mock/mock-places';
-import mockReviews from '../../mock/mock-comments';
-import {accomodationType, RAITING_COEFFICIENT, PlaceCardState} from '../../const';
+import {connect} from "react-redux";
+
+import {accomodationType, RAITING_COEFFICIENT, PlaceCardType} from '../../const';
+import {place as propPlace, review as propReview} from '../prop-types';
 
 import Review from '../review/review';
-import ProxyPlaceCard from '../place-card/proxy-place-card';
+import PlaceCardProxy from '../place-card/place-card-proxy';
 import ReviewForm from '../review-form/review-form';
 import Map from '../map/map';
+
 
 const Property = (props) => {
   const {
@@ -28,11 +30,12 @@ const Property = (props) => {
       name: username
     },
     description,
-    isSigned
+    isSigned,
+    places,
+    reviews
   } = props;
 
   const nearPlaces = places.slice(0, 3);
-  const reviews = mockReviews;
 
   return (
     <main className="page__main page__main--property">
@@ -136,7 +139,7 @@ const Property = (props) => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearPlaces.map((place, i) => <ProxyPlaceCard key={`near${i}`} {...place} state={PlaceCardState.NEAR}/>)}
+            {nearPlaces.map((place, i) => <PlaceCardProxy key={`near${i}`} {...place} cardType={PlaceCardType.NEAR}/>)}
           </div>
         </section>
       </div>
@@ -145,24 +148,10 @@ const Property = (props) => {
 };
 
 Property.propTypes = {
-  preview: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  raiting: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  placeType: PropTypes.oneOf(Object.keys(accomodationType)).isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  isFavourite: PropTypes.bool.isRequired,
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
-  bedrooms: PropTypes.number.isRequired,
-  maxAdults: PropTypes.number.isRequired,
-  goods: PropTypes.arrayOf(PropTypes.string),
-  host: PropTypes.shape({
-    avatarUrl: PropTypes.string,
-    isPro: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired
-  }).isRequired,
-  description: PropTypes.string,
-  isSigned: PropTypes.bool.isRequired
+  ...propPlace,
+  isSigned: PropTypes.bool.isRequired,
+  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired
 };
 
 Property.defaultProps = {
@@ -171,4 +160,9 @@ Property.defaultProps = {
   goods: []
 };
 
-export default Property;
+const mapStateToProps = (state) => ({
+  places: state.places,
+  reviews: state.reviews
+});
+
+export default connect(mapStateToProps)(Property);

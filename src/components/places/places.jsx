@@ -1,14 +1,14 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 
-import places from '../../mock/mock-places';
-import {PlaceCardState} from '../../const';
+import {PlaceCardType} from '../../const';
+import {place as propPlace} from '../prop-types';
 
-import ProxyPlaceCard from '../place-card/proxy-place-card';
+import PlaceCardProxy from '../place-card/place-card-proxy';
 
 
 const Places = (props) => {
-  const {placesNumber, cityName} = props;
+  const {places, cityName} = props;
   const [state, setState] = useState({
     currentCard: null
   });
@@ -23,7 +23,7 @@ const Places = (props) => {
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{placesNumber} places to stay in {cityName}</b>
+      <b className="places__found">{places.length} places to stay in {cityName}</b>
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by</span>
         <span className="places__sorting-type" tabIndex="0">
@@ -40,14 +40,14 @@ const Places = (props) => {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {places.map((place) => <ProxyPlaceCard {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver} state={PlaceCardState.CITIES}/>)}
+        {places.map((place) => <PlaceCardProxy {...place} key={`place${place.id}`} onMouseOver={handlePlaceCardMouseOver} cardType={PlaceCardType.CITIES}/>)}
       </div>
     </section>
   );
 };
 
 Places.propTypes = {
-  placesNumber: PropTypes.number.isRequired,
+  places: PropTypes.arrayOf(PropTypes.shape(propPlace)).isRequired,
   cityName: PropTypes.string.isRequired
 };
 
