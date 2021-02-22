@@ -79,4 +79,5 @@ const mapStateToProps = (state) => ({
   offers: state.offers
 });
 
+export {FavouritesPage};
 export default connect(mapStateToProps)(FavouritesPage);

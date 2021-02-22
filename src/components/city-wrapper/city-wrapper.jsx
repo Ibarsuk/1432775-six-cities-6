@@ -53,4 +53,5 @@ const mapStateToProps = (state) => ({
   offers: state.offers
 });
 
+export {CityWrapper};
 export default connect(mapStateToProps)(CityWrapper);
