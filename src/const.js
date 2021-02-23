@@ -29,3 +29,10 @@ export const OfferCardType = {
   FAVOURITE: `favourite`,
   NEAR: `near`
 };
+
+export const SortType = {
+  POPULAR: `Popular`,
+  PRICE_LOW_TO_HIGH: `Price: low to high`,
+  PRICE_HIGH_TO_LOW: `Price: high to low`,
+  RAITING: `Top rated first`
+};
