@@ -12,6 +12,10 @@ const ActionCreator = {
   updateComments: (payload) => ({
     type: ActionType.UPDATE_REVIEWS,
     payload
+  }),
+  updateActiveOffer: (payload) => ({
+    type: ActionType.UPDATE_ACTIVE_OFFER,
+    payload
   })
 };
 

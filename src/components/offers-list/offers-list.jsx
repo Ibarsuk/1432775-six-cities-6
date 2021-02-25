@@ -1,10 +1,14 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 
+import {connect} from "react-redux";
+
 import {OfferCardType, SortType} from '../../const';
 import {propOffer} from '../prop-types';
+import ActionCreator from "../../store/action-creator";
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
+
 
 const filteredOffers = {
   [SortType.POPULAR]: (offers) => offers,
@@ -14,16 +18,15 @@ const filteredOffers = {
 };
 
 const OffersList = (props) => {
-  const {offers, cityName} = props;
+  const {offers, cityName, onActiveOfferChange, activeOffer} = props;
   const [state, setState] = useState({
-    currentCard: null,
     activeSort: SortType.POPULAR,
     isSortSelectOpened: false
   });
 
   const sorteredOffers = filteredOffers[state.activeSort](offers);
 
-  const handleSelectionButtonClick = () => {
+  const handleSortSelecClick = () => {
     setState((prevState) => ({
       ...state,
       isSortSelectOpened: !prevState.isSortSelectOpened
@@ -39,10 +42,10 @@ const OffersList = (props) => {
   };
 
   const handlePlaceCardMouseOver = (placeId) => {
-    setState({
-      ...state,
-      currentCard: placeId
-    });
+    if (activeOffer === placeId) {
+      return;
+    }
+    onActiveOfferChange(placeId);
   };
 
   return (
@@ -51,7 +54,7 @@ const OffersList = (props) => {
       <b className="places__found">{offers.length} places to stay in {cityName}</b>
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by </span>
-        <span className="places__sorting-type" tabIndex="0" onClick={handleSelectionButtonClick}>
+        <span className="places__sorting-type" tabIndex="0" onClick={handleSortSelecClick}>
           {state.activeSort}
           <svg className="places__sorting-arrow" width="7" height="4">
             <use xlinkHref="#icon-arrow-select"></use>
@@ -75,7 +78,9 @@ const OffersList = (props) => {
 
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
-  cityName: PropTypes.string.isRequired
+  cityName: PropTypes.string.isRequired,
+  onActiveOfferChange: PropTypes.func.isRequired,
+  activeOffer: PropTypes.number
 };
 
 OffersList.defaultProps = {
@@ -83,4 +88,15 @@ OffersList.defaultProps = {
   offersNumber: 0
 };
 
-export default OffersList;
+const mapStateToProps = (state) => ({
+  activeOffer: state.activeOffer
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onActiveOfferChange(activeOffer) {
+    dispatch(ActionCreator.updateActiveOffer(activeOffer));
+  }
+});
+
+export {OffersList};
+export default connect(mapStateToProps, mapDispatchToProps)(OffersList);

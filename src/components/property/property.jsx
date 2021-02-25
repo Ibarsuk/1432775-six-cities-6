@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 
 import {accomodationType, RAITING_COEFFICIENT, OfferCardType} from '../../const';
 import {propOffer, propReview} from '../prop-types';
+import ActionCreator from '../../store/action-creator';
 
 import Review from '../review/review';
 import OfferCardProxy from '../offer-card/offer-card-proxy';
@@ -32,10 +33,19 @@ const Property = (props) => {
     description,
     isSigned,
     offers,
-    reviews
+    reviews,
+    onActiveOfferChange,
+    activeOffer
   } = props;
 
   const nearOffers = offers.slice(0, 3);
+
+  const handlePlaceCardMouseOver = (placeId) => {
+    if (activeOffer === placeId) {
+      return;
+    }
+    onActiveOfferChange(placeId);
+  };
 
   return (
     <main className="page__main page__main--property">
@@ -139,7 +149,7 @@ const Property = (props) => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers.map((offer, i) => <OfferCardProxy key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
+            {nearOffers.map((offer, i) => <OfferCardProxy onMouseOver={handlePlaceCardMouseOver} key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>
@@ -151,7 +161,9 @@ Property.propTypes = {
   ...propOffer,
   isSigned: PropTypes.bool.isRequired,
   offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
-  reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired
+  reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired,
+  onActiveOfferChange: PropTypes.func.isRequired,
+  activeOffer: PropTypes.number
 };
 
 Property.defaultProps = {
@@ -162,8 +174,15 @@ Property.defaultProps = {
 
 const mapStateToProps = (state) => ({
   offers: state.offers,
-  reviews: state.reviews
+  reviews: state.reviews,
+  activeOffer: state.activeOffer
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onActiveOfferChange(activeOffer) {
+    dispatch(ActionCreator.updateActiveOffer(activeOffer));
+  }
 });
 
 export {Property};
-export default connect(mapStateToProps)(Property);
+export default connect(mapStateToProps, mapDispatchToProps)(Property);
