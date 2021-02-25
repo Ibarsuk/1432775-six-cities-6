@@ -68,7 +68,7 @@ class CreateMockPlace {
 // На случай, если понадобится проверка большим количеством случайных мест
 export const randomPlaces = new Array(8).fill().map((value, i) => new CreateMockPlace().getPlace(i));
 
-const places = [
+const offers = [
   {
     bedrooms: 6,
     city: {
@@ -207,4 +207,4 @@ const places = [
   },
 ];
 
-export default places;
+export default offers;

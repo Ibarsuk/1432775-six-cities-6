@@ -24,7 +24,7 @@ export const cities = {
   Dusseldorf: `dusseldorf`
 };
 
-export const PlaceCardState = {
+export const OfferCardType = {
   CITIES: `cities`,
   FAVOURITE: `favourite`,
   NEAR: `near`

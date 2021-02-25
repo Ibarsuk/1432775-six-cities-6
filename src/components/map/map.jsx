@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import {propOffer} from '../prop-types';
+
 const ZOOM = 12;
 const city = [52.38333, 4.9];
 const icon = leaflet.icon({
@@ -30,9 +32,9 @@ const Map = (props) => {
     })
     .addTo(mapRef.current);
 
-    props.places.forEach((place) => {
+    props.offers.forEach((offer) => {
       leaflet
-    .marker([place.location.latitude, place.location.longitude], {icon})
+    .marker([offer.location.latitude, offer.location.longitude], {icon})
     .addTo(mapRef.current);
     });
 
@@ -47,17 +49,7 @@ const Map = (props) => {
 };
 
 Map.propTypes = {
-  places: PropTypes.arrayOf(PropTypes.shape(
-      {
-        location: PropTypes.shape(
-            {
-              latitude: PropTypes.number,
-              longitude: PropTypes.number,
-              zoom: PropTypes.number
-            }
-        )
-      }
-  ))
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
 };
 
 export default Map;

@@ -1,14 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import placesArr from '../../mock/mock-places';
-import {PlaceCardState} from '../../const';
+import {connect} from "react-redux";
 
-import ProxyPlaceCard from '../place-card/proxy-place-card';
+import {propOffer} from '../prop-types';
+import {OfferCardType} from '../../const';
 
-const sortPlaces = (citiesArr) => {
+import OfferCardProxy from '../offer-card/offer-card-proxy';
+
+
+const sortOffers = (citiesArr) => {
   return citiesArr
-  .filter((place) => place.isFavourite)
+  .filter((offer) => offer.isFavourite)
   .reduce((acc, current) => {
     let townCategory = acc[current.city.name];
     if (townCategory) {
@@ -21,9 +24,9 @@ const sortPlaces = (citiesArr) => {
 };
 
 const FavouritesPage = (props) => {
-  const {isEmpty, places = placesArr} = props;
+  const {isEmpty, offers} = props;
 
-  const cities = sortPlaces(places);
+  const cities = sortOffers(offers);
 
   if (isEmpty) {
     return (
@@ -56,7 +59,7 @@ const FavouritesPage = (props) => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {cities[city].map((place) => <ProxyPlaceCard {...place} key={`fav-cards${place.id}`} state={PlaceCardState.FAVOURITE}/>)}
+                  {cities[city].map((offer) => <OfferCardProxy {...offer} key={`fav-cards${offer.id}`} cardType={OfferCardType.FAVOURITE}/>)}
                 </div>
               </li>
             ))}
@@ -69,7 +72,12 @@ const FavouritesPage = (props) => {
 
 FavouritesPage.propTypes = {
   isEmpty: PropTypes.bool,
-  places: PropTypes.array
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
 };
 
-export default FavouritesPage;
+const mapStateToProps = (state) => ({
+  offers: state.offers
+});
+
+export {FavouritesPage};
+export default connect(mapStateToProps)(FavouritesPage);

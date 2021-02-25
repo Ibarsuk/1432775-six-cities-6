@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
 import {accomodationType, RAITING_COEFFICIENT} from "../../const";
+import {propOffer} from '../prop-types';
 
-const PlaceCard = (props) => {
+const OfferCard = (props) => {
   const {
     id,
     preview,
@@ -15,23 +16,23 @@ const PlaceCard = (props) => {
     isPremium,
     isFavourite,
     onMouseOver,
-    cardHtmlClass,
-    imgWrapperHtmlClass,
+    cardClassname,
+    imgWrapperClassname,
     mainImgSize
   } = props;
 
   const activeButtonClassName = isFavourite ? ` place-card__bookmark-button--active` : ``;
 
   return (
-    <article className={`${cardHtmlClass} place-card`} onMouseOver={() => onMouseOver ? onMouseOver(id) : undefined}>
+    <article className={`${cardClassname} place-card`} onMouseOver={() => onMouseOver ? onMouseOver(id) : undefined}>
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
       }
-      <div className={`${imgWrapperHtmlClass}__image-wrapper place-card__image-wrapper`}>
+      <div className={`${imgWrapperClassname}__image-wrapper place-card__image-wrapper`}>
         <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={preview} width={mainImgSize.WIDTH} height={mainImgSize.HEIGHT} alt="Place image"/>
+          <img className="place-card__image" src={preview} width={mainImgSize.width} height={mainImgSize.height} alt="Place image"/>
         </Link>
       </div>
       <div className="place-card__info">
@@ -62,22 +63,15 @@ const PlaceCard = (props) => {
   );
 };
 
-PlaceCard.propTypes = {
-  preview: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  raiting: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  placeType: PropTypes.oneOf(Object.keys(accomodationType)).isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  isFavourite: PropTypes.bool.isRequired,
-  id: PropTypes.number.isRequired,
+OfferCard.propTypes = {
+  ...propOffer,
   onMouseOver: PropTypes.func,
-  cardHtmlClass: PropTypes.string.isRequired,
-  imgWrapperHtmlClass: PropTypes.string.isRequired,
+  cardClassname: PropTypes.string.isRequired,
+  imgWrapperClassname: PropTypes.string.isRequired,
   mainImgSize: PropTypes.shape({
-    WIDTH: PropTypes.number.isRequired,
-    HEIGHT: PropTypes.number.isRequired
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
   })
 };
 
-export default PlaceCard;
+export default OfferCard;

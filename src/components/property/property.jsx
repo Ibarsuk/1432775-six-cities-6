@@ -1,14 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import places from '../../mock/mock-places';
-import mockReviews from '../../mock/mock-comments';
-import {accomodationType, RAITING_COEFFICIENT, PlaceCardState} from '../../const';
+import {connect} from "react-redux";
+
+import {accomodationType, RAITING_COEFFICIENT, OfferCardType} from '../../const';
+import {propOffer, propReview} from '../prop-types';
 
 import Review from '../review/review';
-import ProxyPlaceCard from '../place-card/proxy-place-card';
+import OfferCardProxy from '../offer-card/offer-card-proxy';
 import ReviewForm from '../review-form/review-form';
 import Map from '../map/map';
+
 
 const Property = (props) => {
   const {
@@ -28,11 +30,12 @@ const Property = (props) => {
       name: username
     },
     description,
-    isSigned
+    isSigned,
+    offers,
+    reviews
   } = props;
 
-  const nearPlaces = places.slice(0, 3);
-  const reviews = mockReviews;
+  const nearOffers = offers.slice(0, 3);
 
   return (
     <main className="page__main page__main--property">
@@ -129,14 +132,14 @@ const Property = (props) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map places={nearPlaces}/>
+          <Map offers={nearOffers}/>
         </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearPlaces.map((place, i) => <ProxyPlaceCard key={`near${i}`} {...place} state={PlaceCardState.NEAR}/>)}
+            {nearOffers.map((offer, i) => <OfferCardProxy key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>
@@ -145,24 +148,10 @@ const Property = (props) => {
 };
 
 Property.propTypes = {
-  preview: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  raiting: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  placeType: PropTypes.oneOf(Object.keys(accomodationType)).isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  isFavourite: PropTypes.bool.isRequired,
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
-  bedrooms: PropTypes.number.isRequired,
-  maxAdults: PropTypes.number.isRequired,
-  goods: PropTypes.arrayOf(PropTypes.string),
-  host: PropTypes.shape({
-    avatarUrl: PropTypes.string,
-    isPro: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired
-  }).isRequired,
-  description: PropTypes.string,
-  isSigned: PropTypes.bool.isRequired
+  ...propOffer,
+  isSigned: PropTypes.bool.isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired
 };
 
 Property.defaultProps = {
@@ -171,4 +160,10 @@ Property.defaultProps = {
   goods: []
 };
 
-export default Property;
+const mapStateToProps = (state) => ({
+  offers: state.offers,
+  reviews: state.reviews
+});
+
+export {Property};
+export default connect(mapStateToProps)(Property);
