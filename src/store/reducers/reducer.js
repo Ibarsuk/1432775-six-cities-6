@@ -18,6 +18,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         reviews: action.payload
       };
+    case ActionType.UPDATE_ACTIVE_OFFER:
+      return {
+        ...state,
+        activeOffer: action.payload
+      };
     default:
       return state;
   }

@@ -1,55 +1,106 @@
-import React, {useEffect, useRef} from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import PropTypes from "prop-types";
+
+import {connect} from "react-redux";
 
 import leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import {propOffer} from '../prop-types';
+import {offerPropTypes} from '../prop-types';
+import {cities} from '../../const';
+
+const cityCoords = {
+  [cities.Amsterdam]: [52.38333, 4.9],
+  [cities.Paris]: [48.85761, 2.358499],
+  [cities.Cologne]: [50.930361, 6.937974],
+  [cities.Brussels]: [50.842557, 4.3536969999999995],
+  [cities.Hamburg]: [53.558341000000006, 10.001654],
+  [cities.Dusseldorf]: [51.228402, 6.784314],
+};
 
 const ZOOM = 12;
-const city = [52.38333, 4.9];
-const icon = leaflet.icon({
-  iconUrl: `img/pin.svg`,
-  iconSize: [30, 30]
-});
+const IconType = {
+  COMMON: leaflet.icon({
+    iconUrl: `img/pin.svg`,
+    iconSize: [30, 30]
+  }),
+  ACTIVE: leaflet.icon({
+    iconUrl: `img/pin-active.svg`,
+    iconSize: [30, 30]
+  })
+};
 
-const Map = (props) => {
+const Map = ({activeOfferId, offers, activeCity, openedOfferCity}) => {
   const mapRef = useRef();
 
+  const state = useRef({
+    markers: {},
+    activeMarker: null
+  });
+
+  const setNewMarkerIcon = useCallback((marker, newIcon) => {
+    mapRef.current.removeLayer(marker);
+    marker.options.icon = newIcon;
+    addToMap(marker);
+  });
+
+  const addToMap = useCallback((item) => {
+    item.addTo(mapRef.current);
+  });
+
   useEffect(() => {
+    const currentCityCoords = cityCoords[openedOfferCity] || cityCoords[activeCity];
     mapRef.current = leaflet.map(`map`, {
-      center: city,
+      center: currentCityCoords,
       ZOOM,
       zoomControl: false,
       marker: true
     });
 
-    mapRef.current.setView(city, ZOOM);
+    mapRef.current.setView(currentCityCoords, ZOOM);
 
-    leaflet
-    .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
-      attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
-    })
-    .addTo(mapRef.current);
+    addToMap(leaflet
+      .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
+        attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
+      }));
 
-    props.offers.forEach((offer) => {
-      leaflet
-    .marker([offer.location.latitude, offer.location.longitude], {icon})
-    .addTo(mapRef.current);
+    offers.forEach((offer) => {
+      state.current.markers[offer.id] = leaflet.marker([offer.location.latitude, offer.location.longitude], {icon: IconType.COMMON});
+      addToMap(state.current.markers[offer.id]);
     });
 
     return () => {
       mapRef.current.remove();
     };
-  });
+  }, [activeCity, offers]);
+
+  useEffect(() => {
+    if (activeOfferId === null) {
+      return;
+    }
+    if (state.current.activeMarker) {
+      setNewMarkerIcon(state.current.activeMarker, IconType.COMMON);
+    }
+    state.current.activeMarker = state.current.markers[activeOfferId];
+    setNewMarkerIcon(state.current.activeMarker, IconType.ACTIVE);
+  }, [activeOfferId]);
 
   return (
-    <div id="map" ref={mapRef} style={{height: `100%`}}></div>
+    <div id="map" ref={mapRef} style={{height: `100%`}}/>
   );
 };
 
 Map.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
+  activeOfferId: PropTypes.number,
+  activeCity: PropTypes.string.isRequired,
+  openedOfferCity: PropTypes.string
 };
 
-export default Map;
+const mapStateToProps = (state) => ({
+  activeOfferId: state.activeOfferId,
+  activeCity: state.activeCity
+});
+
+export {Map};
+export default connect(mapStateToProps)(Map);
