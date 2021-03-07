@@ -1,21 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
 import {cities} from '../../const';
-import {propOffer} from '../prop-types';
+import {offerPropTypes} from '../prop-types';
+import ActionCreator from "../../store/action-creator";
 
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
 
-const CityWrapper = (props) => {
-  const {city, offers} = props;
-
+const CityWrapper = ({city, offers, initCity, activeCity}) => {
   const filteredOffers = offers.slice().filter((offer) => cities[offer.city.name] === city);
   const isEmpty = filteredOffers.length < 1;
 
   const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
+
+  useEffect(() => {
+    if (activeCity !== city) {
+      initCity(city);
+    }
+  });
+
   return (
     <div className="cities">
       <div className={`cities__places-container container${containerEmptyClassName}`}>
@@ -31,7 +37,7 @@ const CityWrapper = (props) => {
           </>
           :
           <>
-            <OffersList offers={filteredOffers} offersNumber={filteredOffers.length} cityName={city}/>
+            <OffersList offers={filteredOffers} cityName={city}/>
             <div className="cities__right-section">
               <section className="cities__map map">
                 <Map offers={filteredOffers}/>
@@ -46,12 +52,21 @@ const CityWrapper = (props) => {
 
 CityWrapper.propTypes = {
   city: PropTypes.oneOf(Object.values(cities)).isRequired,
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
+  activeCity: PropTypes.oneOf(Object.values(cities)).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
+  initCity: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  offers: state.offers
+  offers: state.offers,
+  activeCity: state.activeCity
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  initCity(city) {
+    dispatch(ActionCreator.changeCity(city));
+  }
 });
 
 export {CityWrapper};
-export default connect(mapStateToProps)(CityWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(CityWrapper);

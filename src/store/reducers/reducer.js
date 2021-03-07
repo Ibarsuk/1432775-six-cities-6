@@ -3,25 +3,31 @@ import ActionType from '../actions';
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.CHANGE_SITY:
+    case ActionType.CHANGE_CITY:
       return {
         ...state,
         activeCity: action.payload
       };
-    case ActionType.UPDATE_OFFERS:
-      return {
-        ...state,
-        offers: action.payload
-      };
-    case ActionType.UPDATE_REVIEWS:
-      return {
-        ...state,
-        reviews: action.payload
-      };
     case ActionType.UPDATE_ACTIVE_OFFER:
       return {
         ...state,
-        activeOffer: action.payload
+        activeOfferId: action.payload
+      };
+    case ActionType.LOAD_OFFERS:
+      return {
+        ...state,
+        offers: action.payload,
+        areOffersLoaded: true
+      };
+    case ActionType.CHANGE_AUTH:
+      return {
+        ...state,
+        isAuthorized: action.payload
+      };
+    case ActionType.AUTHORIZE:
+      return {
+        ...state,
+        userInfo: action.payload
       };
     default:
       return state;

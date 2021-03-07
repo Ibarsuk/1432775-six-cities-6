@@ -1,13 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
-
-import {propOffer} from '../prop-types';
+import {offerPropTypes} from '../prop-types';
 import {OfferCardType} from '../../const';
+import withOffersFetch from '../../hocks/with-offers-fetch';
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
-
 
 const sortOffers = (citiesArr) => {
   return citiesArr
@@ -24,11 +22,18 @@ const sortOffers = (citiesArr) => {
 };
 
 const FavouritesPage = (props) => {
-  const {isEmpty, offers} = props;
+  const cities = sortOffers(props.offers);
 
-  const cities = sortOffers(offers);
+  // Добавится о одном из следующих заданий
+  // const [favouriteOffers, setFavouriteOffers] = useState(null);
 
-  if (isEmpty) {
+  // if (!favouriteOffers) {
+  //   api.get(ApiPath.FAVORITE)
+  //     .then(({data}) => data.map(adaptOfferToClient))
+  //     .then((newfavouriteOffers) => setFavouriteOffers(newfavouriteOffers));
+  // }
+
+  if (!Object.keys(cities).length) {
     return (
       <main className="page__main page__main--favorites page__main--favorites-empty">
         <div className="page__favorites-container container">
@@ -71,13 +76,8 @@ const FavouritesPage = (props) => {
 };
 
 FavouritesPage.propTypes = {
-  isEmpty: PropTypes.bool,
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired
 };
 
-const mapStateToProps = (state) => ({
-  offers: state.offers
-});
-
 export {FavouritesPage};
-export default connect(mapStateToProps)(FavouritesPage);
+export default withOffersFetch(FavouritesPage);

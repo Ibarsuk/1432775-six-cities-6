@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
+import {Router as BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
 
-import {propOffer} from '../prop-types';
-import {connect} from "react-redux";
+import browserHistory from '../../browser-history';
 
 import Header from '../header/header';
 import MainPage from '../main-page/main-page';
@@ -12,11 +11,12 @@ import AuthorizationPage from '../authorization-page/authorization-page';
 import Property from '../property/property';
 import NotFound from '../not-found/not-found';
 import Footer from '../footer/footer';
+import PrivateRoute from "../private-route/private-route";
 
 
-const App = (props) => {
+const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path="/" exact>
           <Redirect to="/cities/amsterdam"/>
@@ -27,13 +27,13 @@ const App = (props) => {
             <AuthorizationPage/>
           </div>
         </Route>
-        <Route path="/favorites" exact>
+        <PrivateRoute path="/favorites" exact render={() => (
           <div className="page">
             <Header/>
             <FavouritesPage/>
             <Footer/>
           </div>
-        </Route>
+        )}/>
         <Route path="/cities/:city" exact render={(properties) => (
           <div className="page page--gray page--main">
             <Header/>
@@ -44,7 +44,7 @@ const App = (props) => {
         <Route path="/offer/:id" exact render={(properties) => (
           <div className="page">
             <Header/>
-            <Property {...props.offers.find((offer) => String(offer.id) === properties.match.params.id)} isSigned={true}/>
+            <Property offerId={properties.match.params.id} isSigned={true}/>
           </div>
         )}>
         </Route>
@@ -62,12 +62,6 @@ const App = (props) => {
 
 App.propTypes = {
   match: PropTypes.object,
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired
 };
 
-const mapStateToProps = (state) => ({
-  offers: state.offers
-});
-
-export {App};
-export default connect(mapStateToProps)(App);
+export default App;

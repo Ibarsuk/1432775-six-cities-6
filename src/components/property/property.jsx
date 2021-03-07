@@ -1,51 +1,85 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
 import {accomodationType, RAITING_COEFFICIENT, OfferCardType} from '../../const';
-import {propOffer, propReview} from '../prop-types';
 import ActionCreator from '../../store/action-creator';
+import {fetchOffer, fetchNearOffers, fetchReviews} from '../../store/api-actions';
+import withMapRelatedList from '../../hocks/with-map-related-list';
 
 import Review from '../review/review';
 import OfferCardProxy from '../offer-card/offer-card-proxy';
 import ReviewForm from '../review-form/review-form';
 import Map from '../map/map';
-
+import Loading from '../loading/loading';
 
 const Property = (props) => {
   const {
-    price,
-    raiting,
-    title,
-    placeType,
-    isPremium,
-    isFavourite,
-    images,
-    bedrooms,
-    maxAdults,
-    goods,
-    host: {
-      avatarUrl,
-      isPro,
-      name: username
-    },
-    description,
-    isSigned,
-    offers,
-    reviews,
-    onActiveOfferChange,
-    activeOffer
+    offerId,
+    isAuthorized,
+    onOfferCardMouseOver
   } = props;
 
-  const nearOffers = offers.slice(0, 3);
+  const [state, setState] = useState({
+    offer: null,
+    nearOffers: null,
+    reviews: null
+  });
 
-  const handlePlaceCardMouseOver = (placeId) => {
-    if (activeOffer === placeId) {
-      return;
+  useEffect(() => {
+    if (!state.offer) {
+      fetchOffer(offerId)
+      .then((offer) => setState((prevState) => ({
+        ...prevState,
+        offer
+      })));
     }
-    onActiveOfferChange(placeId);
-  };
+    if (!state.nearOffers) {
+      fetchNearOffers(offerId)
+      .then((newNearOffers) => setState((prevState) => ({
+        ...prevState,
+        nearOffers: newNearOffers
+      })));
+    }
+    if (!state.reviews) {
+      fetchReviews(offerId)
+      .then((newReviews) => setState((prevState) => ({
+        ...prevState,
+        reviews: newReviews
+      })));
+    }
+  }, []);
+
+  if (!state.offer) {
+    return (
+      <Loading/>
+    );
+  }
+
+  const {
+    offer: {
+      price,
+      raiting,
+      title,
+      placeType,
+      isPremium,
+      isFavourite,
+      images,
+      bedrooms,
+      maxAdults,
+      goods,
+      host: {
+        avatarUrl,
+        isPro,
+        name: username
+      },
+      description,
+      city
+    },
+    nearOffers,
+    reviews
+  } = state;
 
   return (
     <main className="page__main page__main--property">
@@ -107,11 +141,9 @@ const Property = (props) => {
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
                 {goods.map((good, i) => (
-                  <React.Fragment key={good + i}>
-                    <li className="property__inside-item">
-                      {good}
-                    </li>
-                  </React.Fragment>
+                  <li className="property__inside-item" key={good + i}>
+                    {good}
+                  </li>
                 ))}
               </ul>
             </div>}
@@ -132,57 +164,56 @@ const Property = (props) => {
               </div>
             </div>
             <section className="property__reviews reviews">
-              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length || 0}</span></h2>
-              {reviews.length > 0 &&
+              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews ? reviews.length : `0`}</span></h2>
+              {reviews &&
               <ul className="reviews__list">
                 {reviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
               </ul>}
-              {isSigned && <ReviewForm/>}
+              {isAuthorized && <ReviewForm/>}
             </section>
           </div>
         </div>
+        {nearOffers &&
         <section className="property__map map">
-          <Map offers={nearOffers}/>
+          <Map offers={nearOffers} openedOfferCity={city.name.toLowerCase()}/>
         </section>
+        }
       </section>
+      {nearOffers &&
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers.map((offer, i) => <OfferCardProxy onMouseOver={handlePlaceCardMouseOver} key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
+            {nearOffers && nearOffers.map((offer, i) => <OfferCardProxy onMouseOver={onOfferCardMouseOver} key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>
+      }
     </main>
   );
 };
 
 Property.propTypes = {
-  ...propOffer,
-  isSigned: PropTypes.bool.isRequired,
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
-  reviews: PropTypes.arrayOf(PropTypes.shape(propReview)).isRequired,
-  onActiveOfferChange: PropTypes.func.isRequired,
-  activeOffer: PropTypes.number
+  isAuthorized: PropTypes.bool.isRequired,
+  offerId: PropTypes.string.isRequired,
+  onOfferCardMouseOver: PropTypes.func.isRequired
 };
 
 Property.defaultProps = {
   description: `no description provided`,
-  isSigned: false,
   goods: []
 };
 
 const mapStateToProps = (state) => ({
-  offers: state.offers,
-  reviews: state.reviews,
-  activeOffer: state.activeOffer
+  activeOfferId: state.activeOfferId,
+  isAuthorized: state.isAuthorized
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onActiveOfferChange(activeOffer) {
-    dispatch(ActionCreator.updateActiveOffer(activeOffer));
+  onActiveOfferChange(activeOfferId) {
+    dispatch(ActionCreator.updateActiveOffer(activeOfferId));
   }
 });
 
 export {Property};
-export default connect(mapStateToProps, mapDispatchToProps)(Property);
+export default connect(mapStateToProps, mapDispatchToProps)(withMapRelatedList(Property));

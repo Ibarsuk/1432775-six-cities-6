@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
 import {accomodationType, RAITING_COEFFICIENT} from "../../const";
-import {propOffer} from '../prop-types';
+import {offerPropTypes} from '../prop-types';
 
 const OfferCard = (props) => {
   const {
@@ -64,7 +64,7 @@ const OfferCard = (props) => {
 };
 
 OfferCard.propTypes = {
-  ...propOffer,
+  ...offerPropTypes,
   onMouseOver: PropTypes.func,
   cardClassname: PropTypes.string.isRequired,
   imgWrapperClassname: PropTypes.string.isRequired,
