@@ -29,6 +29,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         userInfo: action.payload
       };
+    case ActionType.SET_IF_AUTH_CHECKED:
+      return {
+        ...state,
+        isAuthChecked: action.payload
+      };
     default:
       return state;
   }

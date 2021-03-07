@@ -46,5 +46,22 @@ export const ApiPath = {
 };
 
 export const StatusCode = {
-  BAD_REQUEST: 400
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404
+};
+
+export const RouterPath = {
+  ROOT: `/`,
+  LOGIN: `/login`,
+  FAVORITES: `/favorites`,
+  CITIES: `/cities`,
+  OFFER: `/offer`,
+  NOT_FOUND: `/not-found`
+};
+
+export const Animation = {
+  SHAKE: {
+    className: `shake`,
+    duration: 600
+  }
 };

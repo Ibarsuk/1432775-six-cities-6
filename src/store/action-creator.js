@@ -20,6 +20,10 @@ const ActionCreator = {
   authorize: (payload) => ({
     type: ActionType.AUTHORIZE,
     payload
+  }),
+  setAuthChecked: () => ({
+    type: ActionType.SET_IF_AUTH_CHECKED,
+    payload: true
   })
 };
 

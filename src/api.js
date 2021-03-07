@@ -18,7 +18,7 @@ export const adaptOfferToClient = (offer) => {
   offer.isFavourite = offer.is_favorite;
   offer.isPremium = offer.is_premium;
   offer.maxAdults = offer.max_adults;
-  offer.preview = offer.preview_image;
+  offer.previewImage = offer.preview_image;
   offer.placeType = offer.type;
   offer.raiting = offer.rating;
   offer.host.avatarUrl = offer.host.avatar_url;

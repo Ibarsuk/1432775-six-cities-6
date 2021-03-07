@@ -1,37 +1,39 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, {useEffect, useState} from "react";
 
-import {offerPropTypes} from '../prop-types';
-import {OfferCardType} from '../../const';
-import withOffersFetch from '../../hocks/with-offers-fetch';
+import {OfferCardType, ApiPath} from '../../const';
+import api, {adaptOfferToClient} from '../../api';
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
+import Loading from '../loading/loading';
 
-const sortOffers = (citiesArr) => {
-  return citiesArr
-  .filter((offer) => offer.isFavourite)
-  .reduce((acc, current) => {
-    let townCategory = acc[current.city.name];
-    if (townCategory) {
-      townCategory.push(current);
-    } else {
-      acc[current.city.name] = [current];
+const FavouritesPage = () => {
+  const [cities, setSities] = useState(null);
+
+  const sortOffers = (citiesArr) => {
+    return citiesArr
+    .filter((offer) => offer.isFavourite)
+    .reduce((acc, current) => {
+      let townCategory = acc[current.city.name];
+      if (townCategory) {
+        townCategory.push(current);
+      } else {
+        acc[current.city.name] = [current];
+      }
+      return acc;
+    }, {});
+  };
+
+  useEffect(() => {
+    if (!cities) {
+      api.get(ApiPath.FAVORITE)
+        .then(({data}) => data.map(adaptOfferToClient))
+        .then((newfavouriteOffers) => setSities(sortOffers(newfavouriteOffers)));
     }
-    return acc;
-  }, {});
-};
+  });
 
-const FavouritesPage = (props) => {
-  const cities = sortOffers(props.offers);
-
-  // Добавится о одном из следующих заданий
-  // const [favouriteOffers, setFavouriteOffers] = useState(null);
-
-  // if (!favouriteOffers) {
-  //   api.get(ApiPath.FAVORITE)
-  //     .then(({data}) => data.map(adaptOfferToClient))
-  //     .then((newfavouriteOffers) => setFavouriteOffers(newfavouriteOffers));
-  // }
+  if (!cities) {
+    return <Loading/>;
+  }
 
   if (!Object.keys(cities).length) {
     return (
@@ -75,9 +77,4 @@ const FavouritesPage = (props) => {
   );
 };
 
-FavouritesPage.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired
-};
-
-export {FavouritesPage};
-export default withOffersFetch(FavouritesPage);
+export default FavouritesPage;

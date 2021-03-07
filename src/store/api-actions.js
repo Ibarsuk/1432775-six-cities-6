@@ -8,11 +8,11 @@ export const fetchOffers = () => (dispatch, _state, passedApi) => {
   .then((offers) => dispatch(ActionCreator.loadOffers(offers)));
 };
 
-export const authorize = (authorizeData, onLoginSuccess, onLoginFailCb) => (dispatch, _state, passedApi) => {
+export const authorize = (authorizeData, onLoginSuccess, onLoginFailCallback) => (dispatch, _state, passedApi) => {
   passedApi.post(ApiPath.LOGIN, authorizeData)
   .catch((err) => {
     if (err.response.status === StatusCode.BAD_REQUEST) {
-      onLoginFailCb();
+      onLoginFailCallback();
     }
     throw err;
   })
@@ -37,7 +37,8 @@ export const checkAuth = () => (dispatch, _state, passedApi) => {
     dispatch(ActionCreator.changeAuth(true));
     dispatch(ActionCreator.authorize(adaptUserInfoToClient(data)));
   })
-  .catch(() => {});
+  .catch(() => {})
+  .finally(dispatch(ActionCreator.setAuthChecked()));
 };
 
 export const fetchOffer = async (offerId) => {
@@ -52,5 +53,10 @@ export const fetchNearOffers = async (offerId) => {
 
 export const fetchReviews = async (offerId) => {
   return api.get(`${ApiPath.COMMENTS}/${offerId}`)
+  .then(({data}) => data.map(adaptReviewToClient));
+};
+
+export const postReview = async (offerId, rewievData) => {
+  return api.post(`${ApiPath.COMMENTS}/${offerId}`, rewievData)
   .then(({data}) => data.map(adaptReviewToClient));
 };

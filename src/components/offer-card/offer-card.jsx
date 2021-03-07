@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
-import {accomodationType, RAITING_COEFFICIENT} from "../../const";
+import {accomodationType, RAITING_COEFFICIENT, RouterPath} from "../../const";
 import {offerPropTypes} from '../prop-types';
 
 const OfferCard = (props) => {
   const {
     id,
-    preview,
+    previewImage,
     price,
     raiting,
     title,
@@ -31,8 +31,8 @@ const OfferCard = (props) => {
       </div>
       }
       <div className={`${imgWrapperClassname}__image-wrapper place-card__image-wrapper`}>
-        <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={preview} width={mainImgSize.width} height={mainImgSize.height} alt="Place image"/>
+        <Link to={`${RouterPath.OFFER}/${id}`}>
+          <img className="place-card__image" src={previewImage} width={mainImgSize.width} height={mainImgSize.height} alt="Place image"/>
         </Link>
       </div>
       <div className="place-card__info">
@@ -55,7 +55,7 @@ const OfferCard = (props) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${id}`}>{title}</Link>
+          <Link to={`${RouterPath.OFFER}/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{accomodationType[placeType]}</p>
       </div>

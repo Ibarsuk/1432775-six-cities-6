@@ -23,7 +23,7 @@ export const offerPropTypes = {
   description: PropTypes.string,
   bedrooms: PropTypes.number.isRequired,
   location: PropTypes.shape(locationPropTypes),
-  preview: PropTypes.string.isRequired,
+  previewImage: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   raiting: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
