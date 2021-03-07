@@ -1,8 +1,9 @@
 const ActionType = {
-  CHANGE_SITY: `city/changeSity`,
-  UPDATE_OFFERS: `city/updateOffers`,
-  UPDATE_REVIEWS: `property/updateReviews`,
-  UPDATE_ACTIVE_OFFER: `city/updateActiveOffer`
+  CHANGE_CITY: `city/changeSity`,
+  UPDATE_ACTIVE_OFFER: `offersList/updateActiveOffer`,
+  LOAD_OFFERS: `data/loadOffers`,
+  CHANGE_AUTH: `user/changeAuth`,
+  AUTHORIZE: `user/authorize`
 };
 
 export default ActionType;

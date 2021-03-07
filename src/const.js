@@ -36,3 +36,15 @@ export const SortType = {
   PRICE_HIGH_TO_LOW: `Price: high to low`,
   RAITING: `Top rated first`
 };
+
+export const ApiPath = {
+  HOTELS: `/hotels`,
+  FAVORITE: `/favorite`,
+  COMMENTS: `/comments`,
+  LOGIN: `/login`,
+  LOGOUT: `/logout`
+};
+
+export const StatusCode = {
+  BAD_REQUEST: 400
+};

@@ -13,13 +13,11 @@ const CitiesMenu = (props) => {
       <section className="locations container">
         <ul className="locations__list tabs__list">
           {Object.keys(cities).map((city, i) => (
-            <React.Fragment key={city + i}>
-              <li className="locations__item">
-                <NavLink onClick={() => props.onLinkClick(cities[city])} activeClassName="tabs__item--active" className="locations__item-link tabs__item" href="#" to={`/cities/${cities[city]}`}>
-                  <span>{city}</span>
-                </NavLink>
-              </li>
-            </React.Fragment>
+            <li className="locations__item" key={city + i}>
+              <NavLink onClick={() => props.onClick(cities[city])} activeClassName="tabs__item--active" className="locations__item-link tabs__item" href="#" to={`/cities/${cities[city]}`}>
+                <span>{city}</span>
+              </NavLink>
+            </li>
           ))}
         </ul>
       </section>
@@ -28,11 +26,11 @@ const CitiesMenu = (props) => {
 };
 
 CitiesMenu.propTypes = {
-  onLinkClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onLinkClick(city) {
+  onClick(city) {
     dispatch(ActionCreator.changeCity(city));
   }
 });

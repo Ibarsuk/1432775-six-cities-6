@@ -1,30 +1,29 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import withMapRelatedList from '../../hocks/with-map-related-list';
 
 import {OfferCardType, SortType} from '../../const';
-import {propOffer} from '../prop-types';
-import ActionCreator from "../../store/action-creator";
+import {offerPropTypes} from '../prop-types';
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
 
 
-const filteredOffers = {
+const offerFilters = {
   [SortType.POPULAR]: (offers) => offers,
-  [SortType.PRICE_LOW_TO_HIGH]: (offers) => offers.sort((previous, current) => previous.price - current.price),
-  [SortType.PRICE_HIGH_TO_LOW]: (offers) => offers.sort((previous, current) => current.price - previous.price),
-  [SortType.RAITING]: (offers) => offers.sort((previous, current) => current.raiting - previous.raiting)
+  [SortType.PRICE_LOW_TO_HIGH]: (offers) => offers.slice().sort((previous, current) => previous.price - current.price),
+  [SortType.PRICE_HIGH_TO_LOW]: (offers) => offers.slice().sort((previous, current) => current.price - previous.price),
+  [SortType.RAITING]: (offers) => offers.slice().sort((previous, current) => current.raiting - previous.raiting)
 };
 
 const OffersList = (props) => {
-  const {offers, cityName, onActiveOfferChange, activeOffer} = props;
+  const {offers, cityName, onOfferCardMouseOver} = props;
   const [state, setState] = useState({
     activeSort: SortType.POPULAR,
     isSortSelectOpened: false
   });
 
-  const sorteredOffers = filteredOffers[state.activeSort](offers);
+  const sorteredOffers = offerFilters[state.activeSort](offers);
 
   const handleSortSelecClick = () => {
     setState((prevState) => ({
@@ -39,13 +38,6 @@ const OffersList = (props) => {
       activeSort: sortType,
       isSortSelectOpened: false
     });
-  };
-
-  const handlePlaceCardMouseOver = (placeId) => {
-    if (activeOffer === placeId) {
-      return;
-    }
-    onActiveOfferChange(placeId);
   };
 
   return (
@@ -70,33 +62,21 @@ const OffersList = (props) => {
         </ul>}
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {sorteredOffers.map((offer) => <OfferCardProxy {...offer} key={`offer${offer.id}`} onMouseOver={handlePlaceCardMouseOver} cardType={OfferCardType.CITIES}/>)}
+        {sorteredOffers.map((offer) => <OfferCardProxy {...offer} key={`offer${offer.id}`} onMouseOver={onOfferCardMouseOver} cardType={OfferCardType.CITIES}/>)}
       </div>
     </section>
   );
 };
 
 OffersList.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape(propOffer)).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
   cityName: PropTypes.string.isRequired,
-  onActiveOfferChange: PropTypes.func.isRequired,
-  activeOffer: PropTypes.number
+  onOfferCardMouseOver: PropTypes.func.isRequired
 };
 
 OffersList.defaultProps = {
   cityName: `chosen city`,
-  offersNumber: 0
 };
 
-const mapStateToProps = (state) => ({
-  activeOffer: state.activeOffer
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onActiveOfferChange(activeOffer) {
-    dispatch(ActionCreator.updateActiveOffer(activeOffer));
-  }
-});
-
 export {OffersList};
-export default connect(mapStateToProps, mapDispatchToProps)(OffersList);
+export default withMapRelatedList(OffersList);

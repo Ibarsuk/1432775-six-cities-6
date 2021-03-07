@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
 import {accomodationType, cities} from '../const';
 
-export const location = {
+export const locationPropTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   zoom: PropTypes.number
 };
 
-export const propOffer = {
+export const offerPropTypes = {
   city: PropTypes.shape({
-    location: PropTypes.shape(location),
+    location: PropTypes.shape(locationPropTypes),
     name: PropTypes.oneOf(Object.keys(cities))
   }).isRequired,
   host: PropTypes.shape({
@@ -22,7 +22,7 @@ export const propOffer = {
   goods: PropTypes.arrayOf(PropTypes.string),
   description: PropTypes.string,
   bedrooms: PropTypes.number.isRequired,
-  location: PropTypes.shape(location),
+  location: PropTypes.shape(locationPropTypes),
   preview: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   raiting: PropTypes.number.isRequired,
@@ -33,7 +33,7 @@ export const propOffer = {
   id: PropTypes.number.isRequired,
 };
 
-export const propReview = {
+export const reviewPropTypes = {
   comment: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
   rating: PropTypes.number.isRequired,
