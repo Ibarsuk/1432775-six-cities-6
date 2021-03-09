@@ -6,5 +6,6 @@ export default {
   activeOfferId: null,
   areOffersLoaded: false,
   isAuthorized: false,
-  userInfo: {}
+  userInfo: {},
+  isAuthChecked: false
 };

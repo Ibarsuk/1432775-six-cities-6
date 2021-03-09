@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 import {connect} from "react-redux";
 
-import {cities} from '../../const';
+import {cities, RouterPath} from '../../const';
 import {logout} from '../../store/api-actions';
 
 const Header = ({userEmail, isAuthorized, activeCity, onLogout}) => {
@@ -13,14 +13,14 @@ const Header = ({userEmail, isAuthorized, activeCity, onLogout}) => {
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link className="header__logo-link header__logo-link--active" to={`/cities/${activeCity}`}>
+            <Link className="header__logo-link header__logo-link--active" to={`${RouterPath.CITIES}/${activeCity}`}>
               <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
             </Link>
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <Link className="header__nav-link header__nav-link--profile" to={isAuthorized ? `/favorites` : `/login`}>
+                <Link className="header__nav-link header__nav-link--profile" to={isAuthorized ? RouterPath.FAVORITES : RouterPath.LOGIN}>
                   <div className="header__avatar-wrapper user__avatar-wrapper"/>
                   <span className="header__user-name user__name">{userEmail || `Sign in`}</span>
                 </Link>

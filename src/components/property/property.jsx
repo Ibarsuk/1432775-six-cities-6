@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
-import {accomodationType, RAITING_COEFFICIENT, OfferCardType} from '../../const';
+import {accomodationType, RAITING_COEFFICIENT, OfferCardType, StatusCode, RouterPath} from '../../const';
 import ActionCreator from '../../store/action-creator';
 import {fetchOffer, fetchNearOffers, fetchReviews} from '../../store/api-actions';
 import withMapRelatedList from '../../hocks/with-map-related-list';
+import browserHistory from '../../browser-history';
 
 import Review from '../review/review';
 import OfferCardProxy from '../offer-card/offer-card-proxy';
@@ -21,65 +22,55 @@ const Property = (props) => {
     onOfferCardMouseOver
   } = props;
 
-  const [state, setState] = useState({
-    offer: null,
-    nearOffers: null,
-    reviews: null
-  });
+  const [offer, setOffer] = useState(null);
+  const [nearOffers, setNearOffers] = useState(null);
+  const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    if (!state.offer) {
+    if (!offer) {
       fetchOffer(offerId)
-      .then((offer) => setState((prevState) => ({
-        ...prevState,
-        offer
-      })));
+      .then((newOffer) => setOffer(newOffer))
+      .catch((err) => {
+        if (err.response.status === StatusCode.NOT_FOUND) {
+          browserHistory.push(RouterPath.NOT_FOUND);
+        }
+      });
     }
-    if (!state.nearOffers) {
+    if (!nearOffers) {
       fetchNearOffers(offerId)
-      .then((newNearOffers) => setState((prevState) => ({
-        ...prevState,
-        nearOffers: newNearOffers
-      })));
+      .then((newNearOffers) => setNearOffers(newNearOffers));
     }
-    if (!state.reviews) {
+    if (!reviews) {
       fetchReviews(offerId)
-      .then((newReviews) => setState((prevState) => ({
-        ...prevState,
-        reviews: newReviews
-      })));
+      .then((newReviews) => setReviews(newReviews));
     }
-  }, []);
+  }, [offerId]);
 
-  if (!state.offer) {
+  if (!offer) {
     return (
       <Loading/>
     );
   }
 
   const {
-    offer: {
-      price,
-      raiting,
-      title,
-      placeType,
-      isPremium,
-      isFavourite,
-      images,
-      bedrooms,
-      maxAdults,
-      goods,
-      host: {
-        avatarUrl,
-        isPro,
-        name: username
-      },
-      description,
-      city
+    price,
+    raiting,
+    title,
+    placeType,
+    isPremium,
+    isFavourite,
+    images,
+    bedrooms,
+    maxAdults,
+    goods,
+    host: {
+      avatarUrl,
+      isPro,
+      name: username
     },
-    nearOffers,
-    reviews
-  } = state;
+    description,
+    city
+  } = offer;
 
   return (
     <main className="page__main page__main--property">
@@ -169,7 +160,7 @@ const Property = (props) => {
               <ul className="reviews__list">
                 {reviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
               </ul>}
-              {isAuthorized && <ReviewForm/>}
+              {isAuthorized && <ReviewForm onReviewsChange={setReviews} offerId={offer.id}/>}
             </section>
           </div>
         </div>
@@ -184,7 +175,7 @@ const Property = (props) => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers && nearOffers.map((offer, i) => <OfferCardProxy onMouseOver={onOfferCardMouseOver} key={`near${i}`} {...offer} cardType={OfferCardType.NEAR}/>)}
+            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy onMouseOver={onOfferCardMouseOver} key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>

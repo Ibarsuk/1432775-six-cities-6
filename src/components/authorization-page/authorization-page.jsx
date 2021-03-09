@@ -1,17 +1,19 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 
 import browserHistory from '../../browser-history';
-import {cities} from '../../const';
+import {cities, RouterPath} from '../../const';
 import {authorize} from '../../store/api-actions';
 
 const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
   const [isRequestFailed, setIsRequestFailed] = useState(false);
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const [formData, setFormdata] = useState({
+    email: ``,
+    password: ``
+  });
 
   const onLoginFail = () => setIsRequestFailed(true);
   const onLoginSuccess = () => browserHistory.goBack();
@@ -19,9 +21,16 @@ const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     onSubmit({
-      email: emailRef.current.value,
-      password: passwordRef.current.value
+      email: formData.email,
+      password: formData.password
     }, onLoginSuccess, onLoginFail);
+  };
+
+  const handleFormChange = ({target: {name, value}}) => {
+    setFormdata((prevFormData) => ({
+      ...prevFormData,
+      [name]: value
+    }));
   };
 
   useEffect(() => {
@@ -35,21 +44,21 @@ const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
       <div className="page__login-container container">
         <section className="login">
           <h1 className="login__title">{isRequestFailed ? `RequestFailed` : `Sign in`}</h1>
-          <form className="login__form form" action="#" method="post">
+          <form className="login__form form" action="#" method="post" onChange={handleFormChange}>
             <div className="login__input-wrapper form__input-wrapper">
               <label className="visually-hidden">E-mail</label>
-              <input ref={emailRef} className="login__input form__input" type="email" name="email" placeholder="Email" required=""/>
+              <input className="login__input form__input" type="email" name="email" placeholder="Email" required=""/>
             </div>
             <div className="login__input-wrapper form__input-wrapper">
               <label className="visually-hidden">Password</label>
-              <input ref={passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password" required=""/>
+              <input className="login__input form__input" type="password" name="password" placeholder="Password" required=""/>
             </div>
             <button onClick={handleSubmit} className="login__submit form__submit button" type="submit">Sign in</button>
           </form>
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={`/cities/${activeCity}`}>
+            <Link className="locations__item-link" to={`${RouterPath.CITIES}/${activeCity}`}>
               <span>{activeCity}</span>
             </Link>
           </div>
@@ -71,8 +80,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData, onLoginSuccess, onLoginFailCb) {
-    dispatch(authorize(authData, onLoginSuccess, onLoginFailCb));
+  onSubmit(authData, onLoginSuccess, onLoginFailCallback) {
+    dispatch(authorize(authData, onLoginSuccess, onLoginFailCallback));
   }
 });
 

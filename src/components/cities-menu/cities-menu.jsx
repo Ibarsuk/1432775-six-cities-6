@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
 import ActionCreator from '../../store/action-creator';
-import {cities} from '../../const';
+import {cities, RouterPath} from '../../const';
 
 const CitiesMenu = (props) => {
   return (
@@ -14,7 +14,7 @@ const CitiesMenu = (props) => {
         <ul className="locations__list tabs__list">
           {Object.keys(cities).map((city, i) => (
             <li className="locations__item" key={city + i}>
-              <NavLink onClick={() => props.onClick(cities[city])} activeClassName="tabs__item--active" className="locations__item-link tabs__item" href="#" to={`/cities/${cities[city]}`}>
+              <NavLink onClick={() => props.onClick(cities[city])} activeClassName="tabs__item--active" className="locations__item-link tabs__item" href="#" to={`${RouterPath.CITIES}/${cities[city]}`}>
                 <span>{city}</span>
               </NavLink>
             </li>
