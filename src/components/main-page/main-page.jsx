@@ -1,7 +1,9 @@
 import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+
+import {getLoadedOffersStatus} from "../../store/reducers/data/selectors";
 
 import {fetchOffers as offersfetch} from '../../store/api-actions';
 import {cities} from '../../const';
@@ -11,11 +13,13 @@ import CityWrapper from '../city-wrapper/city-wrapper';
 import Loading from '../loading/loading';
 
 
-const MainPage = ({city, areOffersLoaded, fetchOffers}) => {
+const MainPage = ({city}) => {
+  const areOffersLoaded = useSelector(getLoadedOffersStatus);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!areOffersLoaded) {
-      fetchOffers();
+      dispatch(offersfetch());
     }
   }, [areOffersLoaded]);
 
@@ -33,20 +37,7 @@ const MainPage = ({city, areOffersLoaded, fetchOffers}) => {
 };
 
 MainPage.propTypes = {
-  city: PropTypes.oneOf(Object.values(cities)).isRequired,
-  areOffersLoaded: PropTypes.bool.isRequired,
-  fetchOffers: PropTypes.func.isRequired
+  city: PropTypes.oneOf(Object.values(cities)).isRequired
 };
 
-const mapStateToProps = (state) => ({
-  areOffersLoaded: state.areOffersLoaded,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchOffers() {
-    dispatch(offersfetch());
-  }
-});
-
-export {MainPage};
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default MainPage;

@@ -4,9 +4,14 @@ import PropTypes from "prop-types";
 import {raitings, Animation} from '../../const';
 import {postReview} from '../../store/api-actions';
 
+const FormField = {
+  RATING: `rating`,
+  REVIEW: `review`
+};
+
 const initialState = {
-  rating: null,
-  review: ``
+  [FormField.RATING]: null,
+  [FormField.REVIEW]: ``
 };
 
 const CommentLength = {
@@ -14,31 +19,26 @@ const CommentLength = {
   MAX: 300
 };
 
+
 const ReviewForm = ({onReviewsChange, offerId}) => {
   const [state, setState] = useState(initialState);
 
-  const submitButtonRef = useRef();
   const formRef = useRef();
 
   const {rating, review} = state;
   const isSubmitButtonDisabled = !(rating && review.length > CommentLength.MIN && review.length <= CommentLength.MAX);
 
-  const setSubmitButtonDisability = (isDisabled) => {
-    submitButtonRef.current.disabled = isDisabled;
-  };
-
-  const handleFormChange = (evt) => {
-    const {target: {name, value}} = evt;
+  const handleFormChange = () => {
+    const formData = new FormData(formRef.current);
     setState({
-      ...state,
-      [name]: value
+      [FormField.RATING]: formData.get(FormField.RATING),
+      [FormField.REVIEW]: formData.get(FormField.REVIEW)
     });
   };
 
   const onFetchError = () => {
     formRef.current.classList.add(Animation.SHAKE.className);
     setTimeout(() => formRef.current.classList.remove(Animation.SHAKE.className), Animation.SHAKE.duration);
-    setSubmitButtonDisability(false);
   };
 
   const onFetchSuccess = () => {
@@ -48,7 +48,6 @@ const ReviewForm = ({onReviewsChange, offerId}) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    setSubmitButtonDisability(true);
     postReview(offerId, {
       "comment": review,
       "rating": rating
@@ -59,7 +58,6 @@ const ReviewForm = ({onReviewsChange, offerId}) => {
   };
 
   useEffect(() => {
-    setSubmitButtonDisability(isSubmitButtonDisabled);
   }, [review, rating]);
 
   return (
@@ -82,7 +80,7 @@ const ReviewForm = ({onReviewsChange, offerId}) => {
         <p className="reviews__help">
                       To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled ref={submitButtonRef}>Submit</button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={isSubmitButtonDisabled}>Submit</button>
       </div>
     </form>
   );

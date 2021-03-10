@@ -1,11 +1,33 @@
-import ActionCreator from './action-creator';
+import {authorize as createAuthAction, loadOffers, loadFavouriteOffers, changeOffer, setAuthChecked} from './action-creators';
 import {ApiPath, StatusCode} from '../const';
 import api, {adaptOfferToClient, adaptReviewToClient, adaptUserInfoToClient} from '../api';
 
 export const fetchOffers = () => (dispatch, _state, passedApi) => {
   passedApi.get(ApiPath.HOTELS)
   .then(({data}) => data.map(adaptOfferToClient))
-  .then((offers) => dispatch(ActionCreator.loadOffers(offers)));
+  .then((offers) => dispatch(loadOffers(offers)));
+};
+
+export const fetchFavouriteOffers = () => (dispatch, _state, passedApi) => {
+  passedApi.get(ApiPath.FAVORITE)
+        .then(({data}) => data.map(adaptOfferToClient))
+        .then((favouriteOffers) => dispatch(loadFavouriteOffers(favouriteOffers)));
+};
+
+export const setOfferFavouriteStatus = ({offerId, status, onSuccessCallBack, onFailCallBack}) => (dispatch, _state, passedApi) => {
+  passedApi.post(`${ApiPath.FAVORITE}/${offerId}/${status}`)
+  .then(({data}) => {
+    const updatedOffer = adaptOfferToClient(data);
+    dispatch(changeOffer(updatedOffer));
+    if (onSuccessCallBack) {
+      onSuccessCallBack(updatedOffer);
+    }
+  })
+  .catch(() => {
+    if (onFailCallBack) {
+      onFailCallBack();
+    }
+  });
 };
 
 export const authorize = (authorizeData, onLoginSuccess, onLoginFailCallback) => (dispatch, _state, passedApi) => {
@@ -17,8 +39,10 @@ export const authorize = (authorizeData, onLoginSuccess, onLoginFailCallback) =>
     throw err;
   })
   .then(({data}) => {
-    dispatch(ActionCreator.authorize(adaptUserInfoToClient(data)));
-    dispatch(ActionCreator.changeAuth(true));
+    dispatch(createAuthAction({
+      userInfo: adaptUserInfoToClient(data),
+      isAuthorized: true
+    }));
     onLoginSuccess();
   });
 };
@@ -26,19 +50,25 @@ export const authorize = (authorizeData, onLoginSuccess, onLoginFailCallback) =>
 export const logout = () => (dispatch, _state, passedApi) => {
   passedApi.get(ApiPath.LOGOUT)
   .then(() => {
-    dispatch(ActionCreator.changeAuth(false));
-    dispatch(ActionCreator.authorize({}));
+    dispatch(createAuthAction({
+      userInfo: {},
+      isAuthorized: false
+    }));
   });
 };
 
 export const checkAuth = () => (dispatch, _state, passedApi) => {
   passedApi.get(ApiPath.LOGIN)
   .then(({data}) => {
-    dispatch(ActionCreator.changeAuth(true));
-    dispatch(ActionCreator.authorize(adaptUserInfoToClient(data)));
+    dispatch(createAuthAction({
+      userInfo: adaptUserInfoToClient(data),
+      isAuthorized: true
+    }));
   })
   .catch(() => {})
-  .finally(dispatch(ActionCreator.setAuthChecked()));
+  .finally(() => {
+    dispatch(setAuthChecked());
+  });
 };
 
 export const fetchOffer = async (offerId) => {

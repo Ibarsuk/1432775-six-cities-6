@@ -1,7 +1,10 @@
-import React, {useCallback, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
+
+import {getActiveCity, getActiveOfferId} from "../../store/reducers/work-process/selectors";
+
 
 import leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -30,7 +33,13 @@ const IconType = {
   })
 };
 
-const Map = ({activeOfferId, offers, activeCity, openedOfferCity}) => {
+const Map = ({
+  offers,
+  openedOffer
+}) => {
+  const activeOfferId = useSelector(getActiveOfferId);
+  const activeCity = useSelector(getActiveCity);
+
   const mapRef = useRef();
 
   const state = useRef({
@@ -38,18 +47,23 @@ const Map = ({activeOfferId, offers, activeCity, openedOfferCity}) => {
     activeMarker: null
   });
 
-  const setNewMarkerIcon = useCallback((marker, newIcon) => {
+  const setNewMarkerIcon = (marker, newIcon) => {
     mapRef.current.removeLayer(marker);
     marker.options.icon = newIcon;
     addToMap(marker);
-  });
+  };
 
-  const addToMap = useCallback((item) => {
+  const createMarker = (offer, iconType) => {
+    state.current.markers[offer.id] = leaflet.marker([offer.location.latitude, offer.location.longitude], {icon: iconType});
+    addToMap(state.current.markers[offer.id]);
+  };
+
+  const addToMap = (item) => {
     item.addTo(mapRef.current);
-  });
+  };
 
   useEffect(() => {
-    const currentCityCoords = cityCoords[openedOfferCity] || cityCoords[activeCity];
+    const currentCityCoords = openedOffer ? cityCoords[openedOffer.city.name.toLowerCase()] : cityCoords[activeCity];
     mapRef.current = leaflet.map(`map`, {
       center: currentCityCoords,
       ZOOM,
@@ -65,14 +79,17 @@ const Map = ({activeOfferId, offers, activeCity, openedOfferCity}) => {
       }));
 
     offers.forEach((offer) => {
-      state.current.markers[offer.id] = leaflet.marker([offer.location.latitude, offer.location.longitude], {icon: IconType.COMMON});
-      addToMap(state.current.markers[offer.id]);
+      createMarker(offer, IconType.COMMON);
     });
+
+    if (openedOffer) {
+      createMarker(openedOffer, IconType.ACTIVE);
+    }
 
     return () => {
       mapRef.current.remove();
     };
-  }, [activeCity, offers]);
+  }, [activeCity]);
 
   useEffect(() => {
     if (activeOfferId === null) {
@@ -86,21 +103,13 @@ const Map = ({activeOfferId, offers, activeCity, openedOfferCity}) => {
   }, [activeOfferId]);
 
   return (
-    <div id="map" ref={mapRef} style={{height: `100%`}}/>
+    <div id="map" style={{height: `100%`}}/>
   );
 };
 
 Map.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
-  activeOfferId: PropTypes.number,
-  activeCity: PropTypes.string.isRequired,
-  openedOfferCity: PropTypes.string
+  openedOffer: PropTypes.shape(offerPropTypes)
 };
 
-const mapStateToProps = (state) => ({
-  activeOfferId: state.activeOfferId,
-  activeCity: state.activeCity
-});
-
-export {Map};
-export default connect(mapStateToProps)(Map);
+export default Map;

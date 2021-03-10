@@ -1,13 +1,15 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 
-import withMapRelatedList from '../../hocks/with-map-related-list';
+import {useDispatch, useSelector} from "react-redux";
+
+import {getActiveOfferId} from "../../store/reducers/work-process/selectors";
 
 import {OfferCardType, SortType} from '../../const';
+import {updateActiveOffer} from '../../store/action-creators';
 import {offerPropTypes} from '../prop-types';
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
-
 
 const offerFilters = {
   [SortType.POPULAR]: (offers) => offers,
@@ -16,12 +18,15 @@ const offerFilters = {
   [SortType.RAITING]: (offers) => offers.slice().sort((previous, current) => current.raiting - previous.raiting)
 };
 
-const OffersList = (props) => {
-  const {offers, cityName, onOfferCardMouseOver} = props;
+const OffersList = ({offers, cityName
+}) => {
   const [state, setState] = useState({
     activeSort: SortType.POPULAR,
     isSortSelectOpened: false
   });
+
+  const activeOfferId = useSelector(getActiveOfferId);
+  const dispatch = useDispatch();
 
   const sorteredOffers = offerFilters[state.activeSort](offers);
 
@@ -39,6 +44,19 @@ const OffersList = (props) => {
       isSortSelectOpened: false
     });
   };
+
+  const handleOfferCardMouseOver = (offerId) => {
+    if (activeOfferId === offerId) {
+      return;
+    }
+    dispatch(updateActiveOffer(offerId));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(updateActiveOffer(null));
+    };
+  }, []);
 
   return (
     <section className="cities__places places">
@@ -62,7 +80,7 @@ const OffersList = (props) => {
         </ul>}
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {sorteredOffers.map((offer) => <OfferCardProxy {...offer} key={`offer${offer.id}`} onMouseOver={onOfferCardMouseOver} cardType={OfferCardType.CITIES}/>)}
+        {sorteredOffers.map((offer) => <OfferCardProxy {...offer} key={`offer${offer.id}`} onMouseOver={handleOfferCardMouseOver} cardType={OfferCardType.CITIES}/>)}
       </div>
     </section>
   );
@@ -70,13 +88,11 @@ const OffersList = (props) => {
 
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
-  cityName: PropTypes.string.isRequired,
-  onOfferCardMouseOver: PropTypes.func.isRequired
+  cityName: PropTypes.string.isRequired
 };
 
 OffersList.defaultProps = {
   cityName: `chosen city`,
 };
 
-export {OffersList};
-export default withMapRelatedList(OffersList);
+export default OffersList;
