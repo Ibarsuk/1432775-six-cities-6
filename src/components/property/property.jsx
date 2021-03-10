@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 
-import {accomodationType, RAITING_COEFFICIENT, OfferCardType, StatusCode, RouterPath} from '../../const';
-import ActionCreator from '../../store/action-creator';
+import {getAuthStatus} from "../../store/reducers/user/selectors";
+
+import {accomodationType, RAITING_COEFFICIENT, OfferCardType, StatusCode, Routes} from '../../const';
 import {fetchOffer, fetchNearOffers, fetchReviews} from '../../store/api-actions';
-import withMapRelatedList from '../../hocks/with-map-related-list';
 import browserHistory from '../../browser-history';
+
+import {useDispatch} from 'react-redux';
+import {setOfferFavouriteStatus} from '../../store/api-actions';
 
 import Review from '../review/review';
 import OfferCardProxy from '../offer-card/offer-card-proxy';
@@ -15,16 +18,16 @@ import ReviewForm from '../review-form/review-form';
 import Map from '../map/map';
 import Loading from '../loading/loading';
 
-const Property = (props) => {
-  const {
-    offerId,
-    isAuthorized,
-    onOfferCardMouseOver
-  } = props;
-
+const Property = ({offerId}) => {
   const [offer, setOffer] = useState(null);
   const [nearOffers, setNearOffers] = useState(null);
   const [reviews, setReviews] = useState(null);
+
+  const isAuthorized = useSelector(getAuthStatus);
+
+  const dispatch = useDispatch();
+
+  const favouriteButtonRef = useRef();
 
   useEffect(() => {
     if (!offer) {
@@ -32,7 +35,7 @@ const Property = (props) => {
       .then((newOffer) => setOffer(newOffer))
       .catch((err) => {
         if (err.response.status === StatusCode.NOT_FOUND) {
-          browserHistory.push(RouterPath.NOT_FOUND);
+          browserHistory.push(Routes.NOT_FOUND);
         }
       });
     }
@@ -53,6 +56,7 @@ const Property = (props) => {
   }
 
   const {
+    id,
     price,
     raiting,
     title,
@@ -72,17 +76,26 @@ const Property = (props) => {
     city
   } = offer;
 
+  let isDisabled = false;
+  const handleFavouriteButtonClick = () => {
+    if (isDisabled) {
+      return;
+    }
+    isDisabled = true;
+    favouriteButtonRef.current.disabled = true;
+    dispatch(setOfferFavouriteStatus(id, Number(!isFavourite), (updatedOffer) => setOffer(updatedOffer)));
+  };
+
+
   return (
     <main className="page__main page__main--property">
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
             {images.map((image, i) => (
-              <React.Fragment key={image + i}>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src={image} alt={`image of ${title}`}/>
-                </div>
-              </React.Fragment>
+              <div className="property__image-wrapper" key={image + i}>
+                <img className="property__image" src={image} alt={`image of ${title}`}/>
+              </div>
             ))}
           </div>
         </div>
@@ -98,7 +111,7 @@ const Property = (props) => {
               <h1 className="property__name">
                 {title}
               </h1>
-              <button className={`property__bookmark-button button${isFavourite ? ` property__bookmark-button--active` : ``}`} type="button">
+              <button ref={favouriteButtonRef} onClick={handleFavouriteButtonClick} className={`property__bookmark-button button${isFavourite ? ` property__bookmark-button--active` : ``}`} type="button">
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"></use>
                 </svg>
@@ -166,7 +179,7 @@ const Property = (props) => {
         </div>
         {nearOffers &&
         <section className="property__map map">
-          <Map offers={nearOffers} openedOfferCity={city.name.toLowerCase()}/>
+          <Map offers={nearOffers} openedOfferCity={city.name.toLowerCase()} openedOffer={offer}/>
         </section>
         }
       </section>
@@ -175,7 +188,7 @@ const Property = (props) => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy onMouseOver={onOfferCardMouseOver} key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR}/>)}
+            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR}/>)}
           </div>
         </section>
       </div>
@@ -185,9 +198,7 @@ const Property = (props) => {
 };
 
 Property.propTypes = {
-  isAuthorized: PropTypes.bool.isRequired,
-  offerId: PropTypes.string.isRequired,
-  onOfferCardMouseOver: PropTypes.func.isRequired
+  offerId: PropTypes.string.isRequired
 };
 
 Property.defaultProps = {
@@ -195,16 +206,4 @@ Property.defaultProps = {
   goods: []
 };
 
-const mapStateToProps = (state) => ({
-  activeOfferId: state.activeOfferId,
-  isAuthorized: state.isAuthorized
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onActiveOfferChange(activeOfferId) {
-    dispatch(ActionCreator.updateActiveOffer(activeOfferId));
-  }
-});
-
-export {Property};
-export default connect(mapStateToProps, mapDispatchToProps)(withMapRelatedList(Property));
+export default Property;

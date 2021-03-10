@@ -1,16 +1,23 @@
 import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+
+import {getOffers} from "../../store/reducers/data/selectors";
+import {getActiveCity} from "../../store/reducers/work-process/selectors";
 
 import {cities} from '../../const';
-import {offerPropTypes} from '../prop-types';
-import ActionCreator from "../../store/action-creator";
+import {changeCity} from "../../store/action-creators";
 
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
 
-const CityWrapper = ({city, offers, initCity, activeCity}) => {
+
+const CityWrapper = ({city}) => {
+  const activeCity = useSelector(getActiveCity);
+  const offers = useSelector(getOffers);
+  const dispatch = useDispatch();
+
   const filteredOffers = offers.slice().filter((offer) => cities[offer.city.name] === city);
   const isEmpty = filteredOffers.length < 1;
 
@@ -18,7 +25,7 @@ const CityWrapper = ({city, offers, initCity, activeCity}) => {
 
   useEffect(() => {
     if (activeCity !== city) {
-      initCity(city);
+      dispatch(changeCity(city));
     }
   });
 
@@ -37,7 +44,7 @@ const CityWrapper = ({city, offers, initCity, activeCity}) => {
           </>
           :
           <>
-            <OffersList offers={filteredOffers} cityName={city}/>
+            <OffersList offers={filteredOffers} cityName={city} key={`${city}-OffersList`}/>
             <div className="cities__right-section">
               <section className="cities__map map">
                 <Map offers={filteredOffers}/>
@@ -51,22 +58,7 @@ const CityWrapper = ({city, offers, initCity, activeCity}) => {
 };
 
 CityWrapper.propTypes = {
-  city: PropTypes.oneOf(Object.values(cities)).isRequired,
-  activeCity: PropTypes.oneOf(Object.values(cities)).isRequired,
-  offers: PropTypes.arrayOf(PropTypes.shape(offerPropTypes)).isRequired,
-  initCity: PropTypes.func.isRequired
+  city: PropTypes.oneOf(Object.values(cities)).isRequired
 };
 
-const mapStateToProps = (state) => ({
-  offers: state.offers,
-  activeCity: state.activeCity
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  initCity(city) {
-    dispatch(ActionCreator.changeCity(city));
-  }
-});
-
-export {CityWrapper};
-export default connect(mapStateToProps, mapDispatchToProps)(CityWrapper);
+export default CityWrapper;

@@ -50,7 +50,7 @@ export const StatusCode = {
   NOT_FOUND: 404
 };
 
-export const RouterPath = {
+export const Routes = {
   ROOT: `/`,
   LOGIN: `/login`,
   FAVORITES: `/favorites`,

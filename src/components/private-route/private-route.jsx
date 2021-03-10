@@ -2,13 +2,18 @@ import React from "react";
 import {Redirect, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 
-import {RouterPath} from '../../const';
+import {getAuthStatus, getIfAuthChecked} from "../../store/reducers/user/selectors";
+
+import {Routes} from '../../const';
 
 import Loading from '../loading/loading';
 
-const PrivateRoute = ({path, exact, render, isAuthorized, isAuthChecked}) => {
+const PrivateRoute = ({path, exact, render}) => {
+
+  const isAuthorized = useSelector(getAuthStatus);
+  const isAuthChecked = useSelector(getIfAuthChecked);
 
   if (!isAuthChecked) {
     return <Loading/>;
@@ -19,7 +24,7 @@ const PrivateRoute = ({path, exact, render, isAuthorized, isAuthChecked}) => {
       return (
         isAuthorized
           ? render(properties)
-          : <Redirect to={RouterPath.LOGIN}/>
+          : <Redirect to={Routes.LOGIN}/>
       );
     }}/>
   );
@@ -28,15 +33,7 @@ const PrivateRoute = ({path, exact, render, isAuthorized, isAuthChecked}) => {
 PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired,
   render: PropTypes.func.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-  isAuthChecked: PropTypes.bool.isRequired,
   exact: PropTypes.bool
 };
 
-const mapStateToProps = (state) => ({
-  isAuthorized: state.isAuthorized,
-  isAuthChecked: state.isAuthChecked
-});
-
-export {PrivateRoute};
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

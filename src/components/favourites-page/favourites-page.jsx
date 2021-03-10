@@ -1,13 +1,19 @@
-import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 
-import {OfferCardType, ApiPath} from '../../const';
-import api, {adaptOfferToClient} from '../../api';
+import React, {useEffect} from "react";
+
+import {OfferCardType} from '../../const';
+import {getFavouriteOffers, getLoadedFavouriteOffersStatus} from "../../store/reducers/data/selectors";
+import {fetchFavouriteOffers} from "../../store/api-actions";
 
 import OfferCardProxy from '../offer-card/offer-card-proxy';
 import Loading from '../loading/loading';
 
 const FavouritesPage = () => {
-  const [cities, setSities] = useState(null);
+  const favouriteOffers = useSelector(getFavouriteOffers);
+  const areOffersLoaded = useSelector(getLoadedFavouriteOffersStatus);
+
+  const dispatch = useDispatch();
 
   const sortOffers = (citiesArr) => {
     return citiesArr
@@ -23,15 +29,13 @@ const FavouritesPage = () => {
     }, {});
   };
 
-  useEffect(() => {
-    if (!cities) {
-      api.get(ApiPath.FAVORITE)
-        .then(({data}) => data.map(adaptOfferToClient))
-        .then((newfavouriteOffers) => setSities(sortOffers(newfavouriteOffers)));
-    }
-  });
+  const cities = sortOffers(favouriteOffers);
 
-  if (!cities) {
+  useEffect(() => {
+    dispatch(fetchFavouriteOffers());
+  }, []);
+
+  if (!areOffersLoaded) {
     return <Loading/>;
   }
 

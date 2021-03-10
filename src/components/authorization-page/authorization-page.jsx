@@ -1,29 +1,35 @@
 import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
-import PropTypes from "prop-types";
 
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+
+import {getActiveCity} from "../../store/reducers/work-process/selectors";
+import {getAuthStatus} from "../../store/reducers/user/selectors";
 
 import browserHistory from '../../browser-history';
-import {cities, RouterPath} from '../../const';
+import {Routes} from '../../const';
 import {authorize} from '../../store/api-actions';
 
-const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
+const AuthorizationPage = () => {
   const [isRequestFailed, setIsRequestFailed] = useState(false);
   const [formData, setFormdata] = useState({
     email: ``,
     password: ``
   });
 
+  const activeCity = useSelector(getActiveCity);
+  const isAuthorized = useSelector(getAuthStatus);
+  const dispatch = useDispatch();
+
   const onLoginFail = () => setIsRequestFailed(true);
   const onLoginSuccess = () => browserHistory.goBack();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onSubmit({
+    dispatch(authorize({
       email: formData.email,
       password: formData.password
-    }, onLoginSuccess, onLoginFail);
+    }, onLoginSuccess, onLoginFail));
   };
 
   const handleFormChange = ({target: {name, value}}) => {
@@ -58,7 +64,7 @@ const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={`${RouterPath.CITIES}/${activeCity}`}>
+            <Link className="locations__item-link" to={`${Routes.CITIES}/${activeCity}`}>
               <span>{activeCity}</span>
             </Link>
           </div>
@@ -68,21 +74,4 @@ const AuthorizationPage = ({activeCity, onSubmit, isAuthorized}) => {
   );
 };
 
-AuthorizationPage.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  activeCity: PropTypes.oneOf(Object.values(cities)).isRequired,
-  isAuthorized: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = (state) => ({
-  activeCity: state.activeCity,
-  isAuthorized: state.isAuthorized
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData, onLoginSuccess, onLoginFailCallback) {
-    dispatch(authorize(authData, onLoginSuccess, onLoginFailCallback));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationPage);
+export default AuthorizationPage;
