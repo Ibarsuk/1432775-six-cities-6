@@ -1,21 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 import {useDispatch, useSelector} from "react-redux";
 
 import {getAuthStatus} from '../../store/reducers/user/selectors';
 
-import {accomodationType, RAITING_COEFFICIENT, Routes} from "../../const";
+import {accommodationType, Routes} from "../../const";
 import {offerPropTypes} from '../prop-types';
 import {setOfferFavouriteStatus} from '../../store/api-actions';
-import browserHistory from '../../browser-history';
+import {getStarsWidth} from "../../util";
 
 const OfferCard = ({
   id,
   previewImage,
   price,
-  raiting,
+  rating,
   title,
   placeType,
   isPremium,
@@ -29,6 +29,8 @@ const OfferCard = ({
 
   const dispatch = useDispatch();
 
+  const history = useHistory();
+
   const onSetFavouriteStatusFail = () => {
     isDisabled = false;
   };
@@ -36,7 +38,7 @@ const OfferCard = ({
   let isDisabled = false;
   const handleFavouriteButtonClick = () => {
     if (!isAuthorized) {
-      browserHistory.push(Routes.LOGIN);
+      history.push(Routes.LOGIN);
       return;
     }
     if (isDisabled) {
@@ -79,14 +81,14 @@ const OfferCard = ({
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${raiting * RAITING_COEFFICIENT}%`}}></span>
+            <span style={{width: getStarsWidth(rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
           <Link to={`${Routes.OFFER}/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{accomodationType[placeType]}</p>
+        <p className="place-card__type">{accommodationType[placeType]}</p>
       </div>
     </article>
   );

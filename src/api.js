@@ -20,7 +20,6 @@ export const adaptOfferToClient = (offer) => {
   offer.maxAdults = offer.max_adults;
   offer.previewImage = offer.preview_image;
   offer.placeType = offer.type;
-  offer.raiting = offer.rating;
   offer.host.avatarUrl = offer.host.avatar_url;
   offer.host.isPro = offer.host.is_pro;
 
@@ -29,7 +28,6 @@ export const adaptOfferToClient = (offer) => {
   delete offer.max_adults;
   delete offer.preview_image;
   delete offer.type;
-  delete offer.rating;
   delete offer.host.avatar_url;
   delete offer.host.is_pro;
 

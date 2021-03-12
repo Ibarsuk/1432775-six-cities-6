@@ -15,7 +15,7 @@ const offerFilters = {
   [SortType.POPULAR]: (offers) => offers,
   [SortType.PRICE_LOW_TO_HIGH]: (offers) => offers.slice().sort((previous, current) => previous.price - current.price),
   [SortType.PRICE_HIGH_TO_LOW]: (offers) => offers.slice().sort((previous, current) => current.price - previous.price),
-  [SortType.RAITING]: (offers) => offers.slice().sort((previous, current) => current.raiting - previous.raiting)
+  [SortType.RATING]: (offers) => offers.slice().sort((previous, current) => current.rating - previous.rating)
 };
 
 const OffersList = ({offers, cityName
@@ -76,7 +76,7 @@ const OffersList = ({offers, cityName
           <li className="places__option places__option--active" tabIndex="0" onClick={() => handleSortButtonClick(SortType.POPULAR)}>Popular</li>
           <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.PRICE_LOW_TO_HIGH)}>Price: low to high</li>
           <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.PRICE_HIGH_TO_LOW)}>Price: high to low</li>
-          <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.RAITING)}>Top rated first</li>
+          <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.RATING)}>Top rated first</li>
         </ul>}
       </form>
       <div className="cities__places-list places__list tabs__content">

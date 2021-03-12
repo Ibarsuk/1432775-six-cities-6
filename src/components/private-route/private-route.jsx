@@ -10,7 +10,7 @@ import {Routes} from '../../const';
 
 import Loading from '../loading/loading';
 
-const PrivateRoute = ({path, exact, render}) => {
+const PrivateRoute = ({path, exact, component: Component}) => {
 
   const isAuthorized = useSelector(getAuthStatus);
   const isAuthChecked = useSelector(getIfAuthChecked);
@@ -23,7 +23,7 @@ const PrivateRoute = ({path, exact, render}) => {
     <Route path={path} exact={exact} render={(properties) => {
       return (
         isAuthorized
-          ? render(properties)
+          ? <Component {...properties}/>
           : <Redirect to={Routes.LOGIN}/>
       );
     }}/>
@@ -32,7 +32,7 @@ const PrivateRoute = ({path, exact, render}) => {
 
 PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired,
-  render: PropTypes.func.isRequired,
+  component: PropTypes.func.isRequired,
   exact: PropTypes.bool
 };
 

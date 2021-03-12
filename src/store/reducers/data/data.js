@@ -4,19 +4,19 @@ import ActionType from '../../actions';
 
 const initialState = {
   offers: [],
-  areOffersLoaded: false,
+  offersLoaded: false,
   favouriteOffers: [],
-  arefavouriteOffersLoaded: false
+  favouriteOffersLoaded: false
 };
 
 const dataReducer = createReducer(initialState, (builder) => {
   builder.addCase(ActionType.LOAD_OFFERS, (state, action) => {
     state.offers = action.payload;
-    state.areOffersLoaded = true;
+    state.offersLoaded = true;
   });
   builder.addCase(ActionType.LOAD_FAVOURITE_OFFERS, (state, action) => {
     state.favouriteOffers = action.payload;
-    state.arefavouriteOffersLoaded = true;
+    state.favouriteOffersLoaded = true;
   });
   builder.addCase(ActionType.CHANGE_OFFER, (state, action) => {
     const updatedOffer = action.payload;
