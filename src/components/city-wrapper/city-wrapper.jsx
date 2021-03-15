@@ -1,24 +1,24 @@
 import React, {useEffect} from "react";
-import PropTypes from "prop-types";
+import {useParams} from "react-router";
 
 import {useDispatch, useSelector} from "react-redux";
 
-import {getOffers} from "../../store/reducers/data/selectors";
+import {getOffersFilteredByCity} from "../../store/reducers/data/selectors";
 import {getActiveCity} from "../../store/reducers/work-process/selectors";
 
-import {cities} from '../../const';
 import {changeCity} from "../../store/action-creators";
 
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
 
 
-const CityWrapper = ({city}) => {
+const CityWrapper = () => {
   const activeCity = useSelector(getActiveCity);
-  const offers = useSelector(getOffers);
+  const filteredOffers = useSelector(getOffersFilteredByCity);
   const dispatch = useDispatch();
 
-  const filteredOffers = offers.slice().filter((offer) => cities[offer.city.name] === city);
+  const {city} = useParams();
+
   const isEmpty = filteredOffers.length < 1;
 
   const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
@@ -55,10 +55,6 @@ const CityWrapper = ({city}) => {
       </div>
     </div>
   );
-};
-
-CityWrapper.propTypes = {
-  city: PropTypes.oneOf(Object.values(cities)).isRequired
 };
 
 export default CityWrapper;

@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import {useParams} from "react-router";
 
 import {useDispatch, useSelector} from "react-redux";
 
@@ -15,8 +14,6 @@ import Header from '../header/header';
 const MainPage = () => {
   const offersLoaded = useSelector(getLoadedOffersStatus);
   const dispatch = useDispatch();
-
-  let {city} = useParams();
 
   useEffect(() => {
     if (!offersLoaded) {
@@ -34,7 +31,7 @@ const MainPage = () => {
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <CitiesMenu/>
-        <CityWrapper city={city}/>
+        <CityWrapper/>
       </main>
     </div>
   );

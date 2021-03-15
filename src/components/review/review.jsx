@@ -1,4 +1,5 @@
 import React from "react";
+import {getStarsWidth} from "../../util";
 import {reviewPropTypes} from '../prop-types';
 
 const Review = ({
@@ -20,7 +21,7 @@ const Review = ({
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: `${rating * 20}%`}}></span>
+            <span style={{width: getStarsWidth(rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

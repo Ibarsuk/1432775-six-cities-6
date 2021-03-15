@@ -13,7 +13,7 @@ export const raitings = [
   `terribly`
 ];
 
-export const ONE_STAR_WIDTH = 20;
+export const ONE_STAR_PERCENT = 20;
 
 export const cities = {
   Paris: `paris`,

@@ -1,3 +1,3 @@
-import {ONE_STAR_WIDTH} from './const';
+import {ONE_STAR_PERCENT} from './const';
 
-export const getStarsWidth = (rating) => `${rating * ONE_STAR_WIDTH}%`;
+export const getStarsWidth = (rating) => `${rating * ONE_STAR_PERCENT}%`;

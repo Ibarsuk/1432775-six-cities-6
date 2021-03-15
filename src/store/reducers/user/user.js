@@ -13,8 +13,8 @@ const userReducer = createReducer(initialState, (builder) => {
     state.userInfo = action.payload.userInfo;
     state.isAuthorized = action.payload.isAuthorized;
   });
-  builder.addCase(ActionType.SET_IF_AUTH_CHECKED, (state, action) => {
-    state.isAuthChecked = action.payload;
+  builder.addCase(ActionType.SET_AUTH_CHECKED, (state) => {
+    state.isAuthChecked = true;
   });
 });
 

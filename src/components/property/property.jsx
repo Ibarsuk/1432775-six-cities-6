@@ -1,14 +1,15 @@
-import React, {useEffect, useState, useRef} from "react";
-import {useHistory, useParams} from "react-router";
+import React, {useRef} from "react";
+import {useParams} from "react-router";
 
-import {useSelector} from "react-redux";
+import {useOffer} from '../../hooks/use-offer';
+import {useNearOffers} from '../../hooks/use-near-offers';
+import {useReviews} from '../../hooks/use-reviews';
+
+import {useSelector, useDispatch} from "react-redux";
 
 import {getAuthStatus} from "../../store/reducers/user/selectors";
 
-import {accommodationType, OfferCardType, StatusCode, Routes} from '../../const';
-import {fetchOffer, fetchNearOffers, fetchReviews} from '../../store/api-actions';
-
-import {useDispatch} from 'react-redux';
+import {accommodationType, OfferCardType} from '../../const';
 import {setOfferFavouriteStatus} from '../../store/api-actions';
 import {getStarsWidth} from '../../util';
 
@@ -20,39 +21,17 @@ import Loading from '../loading/loading';
 import Header from '../header/header';
 
 const Property = () => {
-  const [offer, setOffer] = useState(null);
-  const [nearOffers, setNearOffers] = useState(null);
-  const [reviews, setReviews] = useState(null);
-
-  const history = useHistory();
-
   const {id} = useParams();
+
+  const [offer, setOffer] = useOffer(id);
+  const [nearOffers] = useNearOffers(id);
+  const [reviews, setReviews] = useReviews(id);
 
   const isAuthorized = useSelector(getAuthStatus);
 
   const dispatch = useDispatch();
 
   const favouriteButtonRef = useRef();
-
-  useEffect(() => {
-    if (!offer) {
-      fetchOffer(id)
-      .then((newOffer) => setOffer(newOffer))
-      .catch((err) => {
-        if (err.response.status === StatusCode.NOT_FOUND) {
-          history.push(Routes.NOT_FOUND);
-        }
-      });
-    }
-    if (!nearOffers) {
-      fetchNearOffers(id)
-      .then((newNearOffers) => setNearOffers(newNearOffers));
-    }
-    if (!reviews) {
-      fetchReviews(id)
-      .then((newReviews) => setReviews(newReviews));
-    }
-  }, [id]);
 
   if (!offer) {
     return (
@@ -67,7 +46,13 @@ const Property = () => {
     }
     isDisabled = true;
     favouriteButtonRef.current.disabled = true;
-    dispatch(setOfferFavouriteStatus(offer.id, Number(!offer.isFavourite), (updatedOffer) => setOffer(updatedOffer)));
+    dispatch(
+        setOfferFavouriteStatus({
+          offerId: offer.id,
+          status: offer.isFavourite ? 0 : 1,
+          onSuccessCallback: (updatedOffer) => setOffer(updatedOffer)
+        })
+    );
   };
 
   return (
@@ -158,7 +143,7 @@ const Property = () => {
               <ul className="reviews__list">
                 {reviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
               </ul>}
-                {isAuthorized && <ReviewForm onReviewsChange={setReviews} id={offer.id}/>}
+                {isAuthorized && <ReviewForm onReviewsChange={setReviews} offerId={offer.id}/>}
               </section>
             </div>
           </div>

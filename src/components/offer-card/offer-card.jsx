@@ -48,7 +48,7 @@ const OfferCard = ({
     dispatch(setOfferFavouriteStatus({
       offerId: id,
       status: Number(!isFavourite),
-      onFailCallBack: onSetFavouriteStatusFail
+      onFailCallback: onSetFavouriteStatusFail
     }));
   };
 
