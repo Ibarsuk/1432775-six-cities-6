@@ -1,5 +1,5 @@
 import React from "react";
-import {getStarsWidth} from "../../util";
+import {getFormattedDate, getStarsWidth} from "../../util";
 import {reviewPropTypes} from '../prop-types';
 
 const Review = ({
@@ -8,6 +8,7 @@ const Review = ({
   rating,
   user
 }) => {
+
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
@@ -28,7 +29,7 @@ const Review = ({
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime={date}>{new Date(date).toDateString()}</time>
+        <time className="reviews__time" dateTime={date}>{getFormattedDate(new Date(date))}</time>
       </div>
     </li>
   );

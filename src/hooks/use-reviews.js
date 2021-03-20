@@ -1,14 +1,24 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
-import {fetchReviews} from "../store/api-actions";
+import {fetchReviews as reviewsLoader} from "../store/api-actions";
 
-export const useReviews = (offerID) => {
-  const [reviews, setReviews] = useState(null);
+export const useReviews = () => {
+  const [reviews, setReviews] = useState({
+    pure: [],
+    sortedByDate: []
+  });
 
-  useEffect(() => {
-    fetchReviews(offerID)
-      .then((newReviews) => setReviews(newReviews));
-  }, [offerID]);
+  const fetchReviews = (offerId) =>
+    reviewsLoader(offerId)
+    .then((newReviews) => setReviews({
+      pure: newReviews,
+      sortedByDate: newReviews.slice().sort((previous, current) => +current.date - +previous.date)
+    }));
 
-  return [reviews, setReviews];
+  return {
+    reviews: reviews.pure,
+    reviewsSortedByDate: reviews.sortedByDate,
+    setReviews,
+    fetchReviews
+  };
 };

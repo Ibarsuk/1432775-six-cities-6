@@ -49,14 +49,14 @@ describe(`City-wrapper component works correctly`, () => {
 
   it(`Correct render when empty`, () => {
     const history = createMemoryHistory();
-    history.push(`${Routes.CITIES}/London`);
+    history.push(`${Routes.CITIES}/amsterdam`);
 
     const store = configureStore()({
       DATA: {
         offers: []
       },
       WORK_PROCESS: {
-        activeCity: null
+        activeCity: `amsterdam`
       }
     });
 

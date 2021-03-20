@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Switch>
       <PrivateRoute path={Routes.FAVORITES} exact component={FavouritesPage}/>
-      <Route path={Routes.ROOT} exact render={() => <Redirect to={`${Routes.CITIES}/${cities.Amsterdam}`}/>}/>
+      <Route path={Routes.ROOT} exact render={() => <Redirect to={`${Routes.CITIES}/${cities.Paris}`}/>}/>
       <Route path={Routes.LOGIN} exact component={AuthorizationPage}/>
       <Route path={`${Routes.CITIES}/:city`} exact component={MainPage}/>
       <Route path={`${Routes.OFFER}/:id`} exact component={Property}/>

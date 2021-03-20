@@ -2,9 +2,9 @@ import {cities} from '../../../const';
 import ActionType from '../../actions';
 import workProcessReducer from './work-process';
 
-describe(`Data reducer works correctly`, () => {
+describe(`Work-process reducer works correctly`, () => {
   const initialState = {
-    activeCity: cities.Amsterdam,
+    activeCity: cities.Paris,
     activeOfferId: null
   };
 

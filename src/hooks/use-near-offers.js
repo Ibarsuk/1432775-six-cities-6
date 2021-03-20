@@ -1,14 +1,17 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
-import {fetchNearOffers} from "../store/api-actions";
+import {fetchNearOffers as nearOffersLoader} from "../store/api-actions";
 
-export const useNearOffers = (offerID) => {
-  const [nearOffer, setNearOffers] = useState(null);
+export const useNearOffers = () => {
+  const [nearOffers, setNearOffers] = useState([]);
 
-  useEffect(() => {
-    fetchNearOffers(offerID)
-      .then((newNearOffers) => setNearOffers(newNearOffers));
-  }, [offerID]);
+  const fetchNearOffers = (offerID) =>
+    nearOffersLoader(offerID)
+    .then((newNearOffers) => setNearOffers(newNearOffers));
 
-  return [nearOffer, setNearOffers];
+  return {
+    nearOffers,
+    setNearOffers,
+    fetchNearOffers
+  };
 };

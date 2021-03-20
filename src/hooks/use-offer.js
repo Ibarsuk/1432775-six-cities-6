@@ -1,23 +1,26 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useHistory} from "react-router";
 
 import {Routes, StatusCode} from "../const";
-import {fetchOffer} from "../store/api-actions";
+import {fetchOffer as offerLoader} from "../store/api-actions";
 
-export const useOffer = (offerID) => {
+export const useOffer = () => {
   const [offer, setOffer] = useState(null);
 
   const history = useHistory();
 
-  useEffect(() => {
-    fetchOffer(offerID)
-      .then((newOffer) => setOffer(newOffer))
-      .catch((err) => {
-        if (err.response.status === StatusCode.NOT_FOUND) {
-          history.push(Routes.NOT_FOUND);
-        }
-      });
-  }, [offerID]);
+  const fetchOffer = (offerID) =>
+    offerLoader(offerID)
+    .then((newOffer) => setOffer(newOffer))
+    .catch((err) => {
+      if (err.response.status === StatusCode.NOT_FOUND) {
+        history.push(Routes.NOT_FOUND);
+      }
+    });
 
-  return [offer, setOffer];
+  return {
+    offer,
+    setOffer,
+    fetchOffer
+  };
 };

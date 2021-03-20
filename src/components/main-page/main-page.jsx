@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 import {useDispatch, useSelector} from "react-redux";
 
-import {getLoadedOffersStatus} from "../../store/reducers/data/selectors";
+import {getLoadedOffersStatus, getOffersFilteredByCity} from "../../store/reducers/data/selectors";
 
 import {fetchOffers as offersfetch} from '../../store/api-actions';
 
@@ -13,6 +13,7 @@ import Header from '../header/header';
 
 const MainPage = () => {
   const offersLoaded = useSelector(getLoadedOffersStatus);
+  const filteredOffers = useSelector(getOffersFilteredByCity);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,10 +26,12 @@ const MainPage = () => {
     return <Loading/>;
   }
 
+  const emptyClassName = filteredOffers.length ? `` : ` page__main--index-empty`;
+
   return (
     <div className="page page--gray page--main">
       <Header/>
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index${emptyClassName}`}>
         <h1 className="visually-hidden">Cities</h1>
         <CitiesMenu/>
         <CityWrapper/>

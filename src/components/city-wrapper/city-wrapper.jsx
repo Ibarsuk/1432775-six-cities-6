@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useParams} from "react-router";
+import {Redirect, useParams} from "react-router";
 
 import {useDispatch, useSelector} from "react-redux";
 
@@ -10,6 +10,8 @@ import {changeCity} from "../../store/action-creators";
 
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
+import {cities, Routes} from "../../const";
+import CityWrapperEmpty from "./city-wrapper-empty";
 
 
 const CityWrapper = () => {
@@ -20,28 +22,25 @@ const CityWrapper = () => {
   const {city} = useParams();
 
   const isEmpty = filteredOffers.length < 1;
+  const isCityValid = Object.values(cities).includes(city);
 
   const containerEmptyClassName = isEmpty ? ` cities__places-container--empty` : ``;
 
   useEffect(() => {
-    if (activeCity !== city) {
+    if (activeCity !== city && isCityValid) {
       dispatch(changeCity(city));
     }
   });
+
+  if (!isCityValid) {
+    return <Redirect to={Routes.NOT_FOUND}/>;
+  }
 
   return (
     <div className="cities">
       <div className={`cities__places-container container${containerEmptyClassName}`}>
         {isEmpty ?
-          <>
-            <section className="cities__no-places">
-              <div className="cities__status-wrapper tabs__content">
-                <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
-              </div>
-            </section>
-            <div className="cities__right-section"></div>
-          </>
+          <CityWrapperEmpty/>
           :
           <>
             <OffersList offers={filteredOffers} cityName={city} key={`${city}-OffersList`}/>

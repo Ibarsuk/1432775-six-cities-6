@@ -1,5 +1,5 @@
-import React, {useRef} from "react";
-import {useParams} from "react-router";
+import React, {useEffect, useMemo, useRef} from "react";
+import {useHistory, useParams} from "react-router";
 
 import {useOffer} from '../../hooks/use-offer';
 import {useNearOffers} from '../../hooks/use-near-offers';
@@ -9,7 +9,7 @@ import {useSelector, useDispatch} from "react-redux";
 
 import {getAuthStatus} from "../../store/reducers/user/selectors";
 
-import {accommodationType, OfferCardType} from '../../const';
+import {accommodationType, OfferCardType, Routes, StatusCode} from '../../const';
 import {setOfferFavouriteStatus} from '../../store/api-actions';
 import {getStarsWidth} from '../../util';
 
@@ -20,12 +20,20 @@ import Map from '../map/map';
 import Loading from '../loading/loading';
 import Header from '../header/header';
 
+const MAX_COMMENTS_NUMBER = 10;
+
 const Property = () => {
   const {id} = useParams();
+  const history = useHistory();
 
-  const [offer, setOffer] = useOffer(id);
-  const [nearOffers] = useNearOffers(id);
-  const [reviews, setReviews] = useReviews(id);
+  const {offer, setOffer, fetchOffer} = useOffer();
+  const {nearOffers, fetchNearOffers} = useNearOffers();
+  const {reviewsSortedByDate, setReviews, fetchReviews} = useReviews();
+
+  const slicedSortedReviews = useMemo(
+      () => reviewsSortedByDate.slice(0, MAX_COMMENTS_NUMBER),
+      [reviewsSortedByDate]
+  );
 
   const isAuthorized = useSelector(getAuthStatus);
 
@@ -33,11 +41,26 @@ const Property = () => {
 
   const favouriteButtonRef = useRef();
 
+  // const fetchData = async () => {
+  //   fetchOffer(id);
+  //   fetchNearOffers(id);
+  //   fetchReviews(id);
+  // };
+
+  useEffect(() => {
+    // fetchData();
+    fetchOffer(id);
+    fetchNearOffers(id);
+    fetchReviews(id);
+  }, [id]);
+
   if (!offer) {
     return (
       <Loading/>
     );
   }
+
+  const handleOfferCardClick = () => scrollTo(0, 0);
 
   let isDisabled = false;
   const handleFavouriteButtonClick = () => {
@@ -50,7 +73,12 @@ const Property = () => {
         setOfferFavouriteStatus({
           offerId: offer.id,
           status: offer.isFavourite ? 0 : 1,
-          onSuccessCallback: (updatedOffer) => setOffer(updatedOffer)
+          onSuccessCallback: (updatedOffer) => setOffer(updatedOffer),
+          onFailCallback: (err) => {
+            if (err.response.status === StatusCode.UNAUTHORIZED) {
+              history.push(Routes.LOGIN);
+            }
+          }
         })
     );
   };
@@ -138,10 +166,10 @@ const Property = () => {
                 </div>
               </div>
               <section className="property__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews ? reviews.length : `0`}</span></h2>
-                {reviews &&
+                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviewsSortedByDate ? reviewsSortedByDate.length : `0`}</span></h2>
+                {reviewsSortedByDate &&
               <ul className="reviews__list">
-                {reviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
+                {slicedSortedReviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
               </ul>}
                 {isAuthorized && <ReviewForm onReviewsChange={setReviews} offerId={offer.id}/>}
               </section>
@@ -158,7 +186,7 @@ const Property = () => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR}/>)}
+            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR} onClick={handleOfferCardClick}/>)}
           </div>
         </section>
       </div>
@@ -166,11 +194,6 @@ const Property = () => {
       </main>
     </div>
   );
-};
-
-Property.defaultProps = {
-  description: `no description provided`,
-  goods: []
 };
 
 export default Property;

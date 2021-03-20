@@ -130,13 +130,11 @@ describe(`Routing test`, () => {
   });
 
 
-  it(`Render property on /offer/:id`, () => {
+  it(`Render property on /offer/:id`, async () => {
 
     // Проблемный тест. Ошибка происходит из-за кастомных хуков useOffer, useNearOffers и useReviews
     // Более широкое пояснение в use-offer.test.js
 
-    const history = createMemoryHistory();
-    history.push(`${Routes.OFFER}/1`);
     mockApi
       .onGet(`${ApiRoutes.HOTELS}/1`)
       .reply(200, mockOffers[0]);
@@ -148,6 +146,9 @@ describe(`Routing test`, () => {
     mockApi
       .onGet(`${ApiRoutes.COMMENTS}/1`)
       .reply(200, mockReviews);
+
+    const history = createMemoryHistory();
+    history.push(`${Routes.OFFER}/1`);
 
     const testState = Object.assign(
         {},
@@ -161,7 +162,7 @@ describe(`Routing test`, () => {
         }
     );
 
-    render(
+    await render(
         <redux.Provider store={store(testState)}>
           <Router history={history}>
             <App/>

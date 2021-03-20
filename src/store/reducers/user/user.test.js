@@ -1,7 +1,7 @@
 import ActionType from '../../actions';
 import userReducer from './user';
 
-describe(`Data reducer works correctly`, () => {
+describe(`User reducer works correctly`, () => {
   const initialState = {
     isAuthorized: false,
     userInfo: {},

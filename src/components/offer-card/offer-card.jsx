@@ -21,6 +21,7 @@ const OfferCard = ({
   isPremium,
   isFavourite,
   onMouseOver,
+  onClick,
   cardClassname,
   imgWrapperClassname,
   mainImgSize
@@ -55,7 +56,11 @@ const OfferCard = ({
   const activeButtonClassName = isFavourite ? ` place-card__bookmark-button--active` : ``;
 
   return (
-    <article className={`${cardClassname} place-card`} onMouseOver={() => onMouseOver ? onMouseOver(id) : undefined}>
+    <article
+      className={`${cardClassname} place-card`}
+      onMouseOver={() => onMouseOver ? onMouseOver(id) : undefined}
+      onClick={() => onClick ? onClick() : undefined}
+    >
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>
@@ -81,7 +86,7 @@ const OfferCard = ({
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: getStarsWidth(rating)}}></span>
+            <span style={{width: getStarsWidth(Math.round(rating))}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -96,13 +101,14 @@ const OfferCard = ({
 
 OfferCard.propTypes = {
   ...offerPropTypes,
-  onMouseOver: PropTypes.func,
   cardClassname: PropTypes.string.isRequired,
   imgWrapperClassname: PropTypes.string.isRequired,
   mainImgSize: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
-  })
+  }).isRequired,
+  onMouseOver: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 export default OfferCard;

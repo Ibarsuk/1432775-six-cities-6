@@ -47,7 +47,8 @@ export const ApiRoutes = {
 
 export const StatusCode = {
   BAD_REQUEST: 400,
-  NOT_FOUND: 404
+  NOT_FOUND: 404,
+  UNAUTHORIZED: 401
 };
 
 export const Routes = {
@@ -65,3 +66,5 @@ export const Animation = {
     duration: 600
   }
 };
+
+export const months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];

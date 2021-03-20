@@ -5,7 +5,7 @@ import {cities} from '../../../const';
 
 
 const initialState = {
-  activeCity: cities.Amsterdam,
+  activeCity: cities.Paris,
   activeOfferId: null
 };
 

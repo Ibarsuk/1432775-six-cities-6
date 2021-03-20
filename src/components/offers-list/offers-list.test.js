@@ -54,19 +54,7 @@ describe(`Offers-list component works correctly`, () => {
     expect(dispatch).toHaveBeenCalled();
   });
 
-  it(`Sort buttons call setState`, () => {
-    const mockSetState = jest.fn();
-    const mockUseState = (state) => [state, 123];
-
-    // Еще один проблемый тест. В данном случае не происходит замена реального useState на переопределенный
-    // Оба способа ниже не работают
-
-    // jest.mock(`react`, () => ({
-    //   ...jest.requireActual(`react`),
-    //   useState: (state) => [state, mockSetState]
-    // }));
-
-    jest.spyOn(React, `useState`).mockImplementation(mockUseState);
+  it(`Sort buttons work correctly`, () => {
 
     const history = createMemoryHistory();
 
@@ -79,6 +67,12 @@ describe(`Offers-list component works correctly`, () => {
     );
 
     userEvent.click(container.querySelector(`.places__sorting-type`));
-    expect(mockSetState).toHaveBeenCalled();
+    expect(container.querySelector(`.places__options`)).toBeInTheDocument();
+
+    const secondSortOption = container.querySelector(`.places__options`).children[2];
+
+    userEvent.click(secondSortOption);
+    expect(container.querySelector(`.places__options`)).not.toBeInTheDocument();
+    expect(screen.getByText(secondSortOption.textContent)).toBeInTheDocument();
   });
 });
