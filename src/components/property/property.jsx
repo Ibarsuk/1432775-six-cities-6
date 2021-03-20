@@ -41,14 +41,7 @@ const Property = () => {
 
   const favouriteButtonRef = useRef();
 
-  // const fetchData = async () => {
-  //   fetchOffer(id);
-  //   fetchNearOffers(id);
-  //   fetchReviews(id);
-  // };
-
   useEffect(() => {
-    // fetchData();
     fetchOffer(id);
     fetchNearOffers(id);
     fetchReviews(id);
