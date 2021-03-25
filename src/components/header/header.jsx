@@ -12,7 +12,7 @@ import {logout} from '../../store/api-actions';
 const Header = () => {
   const isAuthorized = useSelector(getAuthStatus);
   const activeCity = useSelector(getActiveCity);
-  const userEmail = useSelector(getUserInfo).email;
+  const userInfo = useSelector(getUserInfo);
   const dispatch = useDispatch();
 
   const handleLogout = () => dispatch(logout());
@@ -31,7 +31,7 @@ const Header = () => {
               <li className="header__nav-item user">
                 <Link className="header__nav-link header__nav-link--profile" to={isAuthorized ? Routes.FAVORITES : Routes.LOGIN}>
                   <div className="header__avatar-wrapper user__avatar-wrapper"/>
-                  <span className="header__user-name user__name">{userEmail || `Sign in`}</span>
+                  <span className="header__user-name user__name">{userInfo.email || `Sign in`}</span>
                 </Link>
               </li>
               {isAuthorized

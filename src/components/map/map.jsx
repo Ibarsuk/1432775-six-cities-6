@@ -22,6 +22,8 @@ const cityCoords = {
 };
 
 const ZOOM = 12;
+const MAX_NEAR_OFFERS = 3;
+
 const IconType = {
   COMMON: leaflet.icon({
     iconUrl: `img/pin.svg`,
@@ -39,6 +41,8 @@ const Map = ({
 }) => {
   const activeOfferId = useSelector(getActiveOfferId);
   const activeCity = useSelector(getActiveCity);
+
+  const offersToCreateMarkers = openedOffer ? offers.slice(0, MAX_NEAR_OFFERS) : offers;
 
   const mapRef = useRef();
 
@@ -78,7 +82,7 @@ const Map = ({
         attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
       }));
 
-    offers.forEach((offer) => {
+    offersToCreateMarkers.forEach((offer) => {
       createMarker(offer, IconType.COMMON);
     });
 
@@ -89,7 +93,7 @@ const Map = ({
     return () => {
       mapRef.current.remove();
     };
-  }, [activeCity]);
+  }, [activeCity, offers]);
 
   useEffect(() => {
     if (activeOfferId === null) {

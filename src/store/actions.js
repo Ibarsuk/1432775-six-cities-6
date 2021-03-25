@@ -5,7 +5,7 @@ const ActionType = {
   LOAD_FAVOURITE_OFFERS: `data/loadFavouriteOffers`,
   CHANGE_OFFER: `data/changeOffer`,
   AUTHORIZE: `user/authorize`,
-  SET_IF_AUTH_CHECKED: `user/setIfAuthChecked`
+  SET_AUTH_CHECKED: `user/setAuthChecked`
 };
 
 export default ActionType;

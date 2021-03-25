@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {accomodationType, cities} from '../const';
+import {accommodationType, cities} from '../const';
 
 export const locationPropTypes = {
   latitude: PropTypes.number,
@@ -25,9 +25,9 @@ export const offerPropTypes = {
   location: PropTypes.shape(locationPropTypes),
   previewImage: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  raiting: PropTypes.number.isRequired,
+  rating: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  placeType: PropTypes.oneOf(Object.keys(accomodationType)).isRequired,
+  placeType: PropTypes.oneOf(Object.keys(accommodationType)).isRequired,
   isPremium: PropTypes.bool.isRequired,
   isFavourite: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,

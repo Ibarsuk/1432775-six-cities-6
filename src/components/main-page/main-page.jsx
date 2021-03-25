@@ -1,43 +1,43 @@
 import React, {useEffect} from "react";
-import PropTypes from "prop-types";
 
 import {useDispatch, useSelector} from "react-redux";
 
-import {getLoadedOffersStatus} from "../../store/reducers/data/selectors";
+import {getLoadedOffersStatus, getOffersFilteredByCity} from "../../store/reducers/data/selectors";
 
 import {fetchOffers as offersfetch} from '../../store/api-actions';
-import {cities} from '../../const';
 
 import CitiesMenu from '../cities-menu/cities-menu';
 import CityWrapper from '../city-wrapper/city-wrapper';
 import Loading from '../loading/loading';
+import Header from '../header/header';
 
-
-const MainPage = ({city}) => {
-  const areOffersLoaded = useSelector(getLoadedOffersStatus);
+const MainPage = () => {
+  const offersLoaded = useSelector(getLoadedOffersStatus);
+  const filteredOffers = useSelector(getOffersFilteredByCity);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!areOffersLoaded) {
+    if (!offersLoaded) {
       dispatch(offersfetch());
     }
-  }, [areOffersLoaded]);
+  }, [offersLoaded]);
 
-  if (!areOffersLoaded) {
+  if (!offersLoaded) {
     return <Loading/>;
   }
 
-  return (
-    <main className="page__main page__main--index">
-      <h1 className="visually-hidden">Cities</h1>
-      <CitiesMenu/>
-      <CityWrapper city={city}/>
-    </main>
-  );
-};
+  const emptyClassName = filteredOffers.length ? `` : ` page__main--index-empty`;
 
-MainPage.propTypes = {
-  city: PropTypes.oneOf(Object.values(cities)).isRequired
+  return (
+    <div className="page page--gray page--main">
+      <Header/>
+      <main className={`page__main page__main--index${emptyClassName}`}>
+        <h1 className="visually-hidden">Cities</h1>
+        <CitiesMenu/>
+        <CityWrapper/>
+      </main>
+    </div>
+  );
 };
 
 export default MainPage;

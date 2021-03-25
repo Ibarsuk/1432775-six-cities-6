@@ -1,4 +1,5 @@
 import React from "react";
+import {getFormattedDate, getStarsWidth} from "../../util";
 import {reviewPropTypes} from '../prop-types';
 
 const Review = ({
@@ -7,6 +8,7 @@ const Review = ({
   rating,
   user
 }) => {
+
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
@@ -20,14 +22,14 @@ const Review = ({
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: `${rating * 20}%`}}></span>
+            <span style={{width: getStarsWidth(rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime={date}>{new Date(date).toDateString()}</time>
+        <time className="reviews__time" dateTime={date}>{getFormattedDate(new Date(date))}</time>
       </div>
     </li>
   );

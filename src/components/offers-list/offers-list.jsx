@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import PropTypes from "prop-types";
 
 import {useDispatch, useSelector} from "react-redux";
@@ -15,22 +15,22 @@ const offerFilters = {
   [SortType.POPULAR]: (offers) => offers,
   [SortType.PRICE_LOW_TO_HIGH]: (offers) => offers.slice().sort((previous, current) => previous.price - current.price),
   [SortType.PRICE_HIGH_TO_LOW]: (offers) => offers.slice().sort((previous, current) => current.price - previous.price),
-  [SortType.RAITING]: (offers) => offers.slice().sort((previous, current) => current.raiting - previous.raiting)
+  [SortType.RATING]: (offers) => offers.slice().sort((previous, current) => current.rating - previous.rating)
 };
 
 const OffersList = ({offers, cityName
 }) => {
+  const activeOfferId = useSelector(getActiveOfferId);
+  const dispatch = useDispatch();
+
   const [state, setState] = useState({
     activeSort: SortType.POPULAR,
     isSortSelectOpened: false
   });
 
-  const activeOfferId = useSelector(getActiveOfferId);
-  const dispatch = useDispatch();
+  const sorteredOffers = useMemo(() => offerFilters[state.activeSort](offers));
 
-  const sorteredOffers = offerFilters[state.activeSort](offers);
-
-  const handleSortSelecClick = () => {
+  const handleSortSelectClick = () => {
     setState((prevState) => ({
       ...state,
       isSortSelectOpened: !prevState.isSortSelectOpened
@@ -64,7 +64,7 @@ const OffersList = ({offers, cityName
       <b className="places__found">{offers.length} places to stay in {cityName}</b>
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by </span>
-        <span className="places__sorting-type" tabIndex="0" onClick={handleSortSelecClick}>
+        <span className="places__sorting-type" tabIndex="0" onClick={handleSortSelectClick}>
           {state.activeSort}
           <svg className="places__sorting-arrow" width="7" height="4">
             <use xlinkHref="#icon-arrow-select"></use>
@@ -76,7 +76,7 @@ const OffersList = ({offers, cityName
           <li className="places__option places__option--active" tabIndex="0" onClick={() => handleSortButtonClick(SortType.POPULAR)}>Popular</li>
           <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.PRICE_LOW_TO_HIGH)}>Price: low to high</li>
           <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.PRICE_HIGH_TO_LOW)}>Price: high to low</li>
-          <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.RAITING)}>Top rated first</li>
+          <li className="places__option" tabIndex="0" onClick={() => handleSortButtonClick(SortType.RATING)}>Top rated first</li>
         </ul>}
       </form>
       <div className="cities__places-list places__list tabs__content">

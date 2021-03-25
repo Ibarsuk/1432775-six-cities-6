@@ -25,6 +25,4 @@ export const authorize = createAction(ActionType.AUTHORIZE, (payload) => ({
   payload
 }));
 
-export const setAuthChecked = createAction(ActionType.SET_IF_AUTH_CHECKED, () => ({
-  payload: true
-}));
+export const setAuthChecked = createAction(ActionType.SET_AUTH_CHECKED);
