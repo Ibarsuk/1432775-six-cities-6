@@ -35,10 +35,7 @@ it(`Hook useNearOffers works correctly`, async () => {
   expect(reviewsSortedByDate).toBeInstanceOf(Array);
   expect(reviewsSortedByDate).toEqual(mockReviewsSortedByDate);
 
-  act(() => setReviews({
-    pure: testArr,
-    sortedByDate: testArr
-  }));
+  act(() => setReviews(testArr));
   reviews = result.current.reviews;
   reviewsSortedByDate = result.current.reviewsSortedByDate;
 

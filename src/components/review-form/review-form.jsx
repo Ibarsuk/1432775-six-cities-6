@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from "react";
+import React, {useRef, useState} from "react";
 import PropTypes from "prop-types";
 
 import {raitings, Animation} from '../../const';
@@ -56,9 +56,6 @@ const ReviewForm = ({onReviewsChange, offerId}) => {
     .then(onFetchSuccess)
     .catch(onFetchError);
   };
-
-  useEffect(() => {
-  }, [review, rating]);
 
   return (
     <form className="reviews__form form" action="#" method="post" onChange={handleFormChange} onSubmit={handleSubmit} ref={formRef}>
