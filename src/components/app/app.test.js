@@ -10,9 +10,12 @@ import MockAdapter from "axios-mock-adapter";
 import {createMemoryHistory} from "history";
 import {ApiRoutes, cities, Routes} from "../../const";
 import {mockOffers, mockReviews} from "../../test-mocks";
-import api from "../../api";
+import api, {adaptOfferToClient, adaptReviewToClient} from "../../api";
 
 import App from "./app";
+import * as useOffer from "../../hooks/use-offer";
+import * as useNearOffers from "../../hooks/use-near-offers";
+import * as useReviews from "../../hooks/use-reviews";
 
 
 const initialState = {
@@ -131,18 +134,26 @@ describe(`Routing test`, () => {
 
 
   it(`Render property on /offer/:id`, () => {
+    const offers = mockOffers.map(adaptOfferToClient);
 
-    mockApi
-      .onGet(`${ApiRoutes.HOTELS}/1`)
-      .reply(200, mockOffers[0]);
+    jest.spyOn(useOffer, `useOffer`).mockImplementation(() =>({
+      offer: offers[0],
+      setOffer: ()=>{},
+      fetchOffer: ()=>{}
+    }));
 
-    mockApi
-      .onGet(`${ApiRoutes.HOTELS}/1/nearby`)
-      .reply(200, mockOffers);
+    jest.spyOn(useNearOffers, `useNearOffers`).mockImplementation(() =>({
+      nearOffers: offers,
+      setNearOffers: ()=>{},
+      fetchNearOffers: ()=>{}
+    }));
 
-    mockApi
-      .onGet(`${ApiRoutes.COMMENTS}/1`)
-      .reply(200, mockReviews);
+    jest.spyOn(useReviews, `useReviews`).mockImplementation(() =>({
+      reviews: mockReviews.map(adaptReviewToClient),
+      reviewsSortedByDate: mockReviews,
+      setReviews: ()=>{},
+      fetchReviews: ()=>{}
+    }));
 
     const history = createMemoryHistory();
     history.push(`${Routes.OFFER}/1`);
