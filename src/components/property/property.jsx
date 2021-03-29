@@ -162,7 +162,7 @@ const Property = () => {
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviewsSortedByDate ? reviewsSortedByDate.length : `0`}</span></h2>
                 {reviewsSortedByDate &&
               <ul className="reviews__list">
-                {slicedSortedReviews.map((review, i) => <Review key={`review${i}`} {...review} />)}
+                {slicedSortedReviews.map((review) => <Review key={`review-${review.id}`} {...review} />)}
               </ul>}
                 {isAuthorized && <ReviewForm onReviewsChange={setReviews} offerId={offer.id}/>}
               </section>
@@ -179,7 +179,7 @@ const Property = () => {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {nearOffers && nearOffers.map((nearOffer, i) => <OfferCardProxy key={`near${i}`} {...nearOffer} cardType={OfferCardType.NEAR} onClick={handleOfferCardClick}/>)}
+            {nearOffers && nearOffers.map((nearOffer) => <OfferCardProxy key={`near-offer-${nearOffer.id}`} {...nearOffer} cardType={OfferCardType.NEAR} onClick={handleOfferCardClick}/>)}
           </div>
         </section>
       </div>

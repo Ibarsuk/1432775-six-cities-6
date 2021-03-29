@@ -9,7 +9,7 @@ const mockApi = new MockAdapter(api);
 
 it(`Hook useNearOffers works correctly`, async () => {
   const mockReviewsSortedByDate = mockReviews.slice().sort((previous, current) => +current.date - +previous.date);
-  const testArr = [1, 55, 521];
+  const randomNumbers = [1, 55, 521];
 
   mockApi
   .onGet(`${ApiRoutes.COMMENTS}/1`)
@@ -35,10 +35,10 @@ it(`Hook useNearOffers works correctly`, async () => {
   expect(reviewsSortedByDate).toBeInstanceOf(Array);
   expect(reviewsSortedByDate).toEqual(mockReviewsSortedByDate);
 
-  act(() => setReviews(testArr));
+  act(() => setReviews(randomNumbers));
   reviews = result.current.reviews;
   reviewsSortedByDate = result.current.reviewsSortedByDate;
 
-  expect(reviews).toEqual(testArr);
-  expect(reviewsSortedByDate).toEqual(testArr);
+  expect(reviews).toEqual(randomNumbers);
+  expect(reviewsSortedByDate).toEqual(randomNumbers);
 });

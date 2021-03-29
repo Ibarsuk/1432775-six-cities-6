@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {getLoadedOffersStatus, getOffersFilteredByCity} from "../../store/reducers/data/selectors";
 
-import {fetchOffers as offersfetch} from '../../store/api-actions';
+import {fetchOffers} from '../../store/api-actions';
 
 import CitiesMenu from '../cities-menu/cities-menu';
 import CityWrapper from '../city-wrapper/city-wrapper';
@@ -18,7 +18,7 @@ const MainPage = () => {
 
   useEffect(() => {
     if (!offersLoaded) {
-      dispatch(offersfetch());
+      dispatch(fetchOffers());
     }
   }, [offersLoaded]);
 

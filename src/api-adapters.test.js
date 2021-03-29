@@ -1,5 +1,5 @@
-/* eslint-disable camelcase */
 import {adaptOfferToClient, adaptReviewToClient, adaptUserInfoToClient} from "./api";
+import {userInfo} from './test-mocks';
 
 describe(`Api adapters work correctly`, () => {
   it(`Adapter adaptOfferToClient works correctly`, () => {
@@ -100,19 +100,8 @@ describe(`Api adapters work correctly`, () => {
   });
 
   it(`Adapter adaptUserIfoToClient works correctly`, () => {
-    const userInfo = {
-      avatar_url: `img/avatar-max.jpg`,
-      id: 1,
-      is_pro: false,
-      name: `Ann`
-    };
 
-    const adaptedUserInfo = {
-      id: 1,
-      name: `Ann`,
-      avatarUrl: `img/avatar-max.jpg`,
-      isPro: false
-    };
+    const adaptedUserInfo = adaptUserInfoToClient(userInfo);
 
     expect(adaptUserInfoToClient(userInfo)).toEqual(adaptedUserInfo);
   });

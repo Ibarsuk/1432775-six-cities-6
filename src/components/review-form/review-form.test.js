@@ -20,8 +20,8 @@ describe(`Review-form component works correctly`, () => {
 
   it(`onReviewsChange is called on form submit`, async () => {
     const onReviewsChange = jest.fn();
-    const testArr = [1, 2, `44`, 1396];
-    jest.spyOn(fetchers, `postReview`).mockImplementation(async () => testArr);
+    const randomNumbers = [1, 2, 44, 1396];
+    jest.spyOn(fetchers, `postReview`).mockImplementation(async () => randomNumbers);
 
     const {container} = render(
         <ReviewForm
@@ -34,7 +34,7 @@ describe(`Review-form component works correctly`, () => {
     userEvent.click(screen.getByDisplayValue(`4`));
     await act(async () => await userEvent.click(container.querySelector(`.reviews__submit`)));
 
-    expect(onReviewsChange).toHaveBeenCalledWith(testArr);
+    expect(onReviewsChange).toHaveBeenCalledWith(randomNumbers);
   });
 });
 

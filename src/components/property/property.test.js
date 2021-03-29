@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React from "react";
 import {Router} from "react-router-dom";
 import {act, render, screen} from "@testing-library/react";
@@ -86,11 +85,7 @@ describe(`Component property works correctly`, () => {
   it(`Favourite button works correctly`, async () => {
     mockApi
     .onPost()
-    .reply(200, Object.assign(
-        {},
-        mockOffers[0],
-        {is_Favourite: !mockOffers[0].is_Favourite}
-    ));
+    .reply(200, mockOffers[0]);
 
     const {container} = render(
         <redux.Provider store={store}>
