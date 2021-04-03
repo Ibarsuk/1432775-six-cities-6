@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {memo, useEffect, useRef} from "react";
 import PropTypes from "prop-types";
 
 import {useSelector} from "react-redux";
@@ -116,4 +116,11 @@ Map.propTypes = {
   openedOffer: PropTypes.shape(offerPropTypes)
 };
 
-export default Map;
+export default memo(Map, (prev, next) => {
+  if (!prev.offers.length) {
+    return 0;
+  }
+  return next.offers.every((offer, i) => {
+    return offer.id === prev.offers[i].id;
+  });
+});
